@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: site.meta.title,
   description: site.meta.description,
+  verification: {
+    google: "EdBKUT1uzBwVqTErRQwSy-tOWqvcsuHtc4fZkLfB2Xw",
+  },
   applicationName: site.name,
   authors: [{ name: site.name }],
   creator: site.name,
