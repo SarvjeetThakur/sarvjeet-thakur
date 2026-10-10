@@ -1,0 +1,4 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [".claude/**", "AGENTS.md", "pnpm-lock.yaml", "skills-lock.json"]
+}
