@@ -1,0 +1,108 @@
+{
+  "name": "Sarvjeet Thakur",
+  "initials": "ST",
+  "role": "Product engineer",
+  "language": "en",
+  "meta": {
+    "title": "Sarvjeet Thakur — Product engineer",
+    "description": "Product engineer building interfaces with weight and consequence. Selected work, background and contact.",
+    "ogAlt": "Sarvjeet Thakur — Product engineer"
+  },
+  "hero": {
+    "greeting": "Available for work",
+    "headline": ["Interfaces", "with weight", "and consequence."],
+    "intro": "I am a product engineer. I build the parts of software people touch: fast, considered, and solid under the hand.",
+    "actions": [
+      {
+        "label": "See the work",
+        "href": "#work",
+        "icon": "arrowRight",
+        "primary": true
+      },
+      {
+        "label": "Get in touch",
+        "href": "#contact",
+        "icon": "mail",
+        "primary": false
+      }
+    ],
+    "stats": [
+      {
+        "value": "8 yrs",
+        "label": "Building for the web"
+      },
+      {
+        "value": "30+",
+        "label": "Products shipped"
+      },
+      {
+        "value": "4",
+        "label": "Teams led"
+      }
+    ],
+    "scrollHint": "Scroll"
+  },
+  "nav": {
+    "label": "Sections",
+    "links": [
+      {
+        "id": "work",
+        "label": "Work"
+      },
+      {
+        "id": "about",
+        "label": "About"
+      },
+      {
+        "id": "contact",
+        "label": "Contact"
+      }
+    ],
+    "skip": "Skip to content",
+    "mainLabel": "Portfolio content"
+  },
+  "sections": {
+    "work": {
+      "index": "01",
+      "heading": "Selected work"
+    },
+    "about": {
+      "index": "02",
+      "heading": "About"
+    },
+    "contact": {
+      "index": "03",
+      "heading": "Contact"
+    }
+  },
+  "physics": {
+    "enter": "Physics mode",
+    "exit": "Exit physics",
+    "overview": "Overview",
+    "shake": "Shake",
+    "reset": "Reset",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "panUp": "Move up",
+    "panDown": "Move down",
+    "hint": "Drag to pan, pinch or ctrl+scroll to zoom, grab anything and throw it. The controls below do the same from the keyboard.",
+    "toolbarLabel": "Canvas controls",
+    "entered": "Physics mode on. The page is now a canvas; some text and links are only available in the normal view.",
+    "exited": "Physics mode off. The page is a document again."
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "footer": {
+    "note": "Built with Next.js, three.js and matter-js.",
+    "backToTop": "Back to top"
+  },
+  "presence": {
+    "you": "Click to change your name",
+    "namePlaceholder": "Your name",
+    "jumpTo": "Jump to {name}",
+    "alone": "You are the only one here"
+  }
+}

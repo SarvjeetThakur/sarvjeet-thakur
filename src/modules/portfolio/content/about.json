@@ -1,0 +1,28 @@
+{
+  "lead": "I sit between design and engineering, and I have never been able to pick a side.",
+  "paragraphs": [
+    "Most of my work is the part people actually touch: the interaction that has to feel right, the page that has to load on a bad connection, the empty state nobody thought about. I care about software that holds up under a real hand.",
+    "Before this I ran infrastructure at a fintech, which is where I learned that the fastest interface is the one that does not need to ask the server. I like small teams, short feedback loops, and shipping things people can try the same week."
+  ],
+  "skillsHeading": "What I work with",
+  "skills": [
+    { "label": "TypeScript", "icon": "braces" },
+    { "label": "React", "icon": "code" },
+    { "label": "Next.js", "icon": "layers" },
+    { "label": "Rust", "icon": "boxes" },
+    { "label": "Postgres", "icon": "database" },
+    { "label": "Node.js", "icon": "server" },
+    { "label": "WebGL", "icon": "orbit" },
+    { "label": "Design systems", "icon": "palette" },
+    { "label": "Figma", "icon": "figma" },
+    { "label": "Performance", "icon": "gauge" },
+    { "label": "Accessibility", "icon": "accessibility" },
+    { "label": "Testing", "icon": "testTube" }
+  ],
+  "nowHeading": "Right now",
+  "now": [
+    { "icon": "rocket", "text": "Building a physics-driven design tool on weekends." },
+    { "icon": "sparkles", "text": "Learning compute shaders, slowly and badly." },
+    { "icon": "cloud", "text": "Open to product-engineering roles and select freelance." }
+  ]
+}

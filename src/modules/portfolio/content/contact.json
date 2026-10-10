@@ -1,0 +1,25 @@
+{
+  "lead": "Have something that needs building?",
+  "body": "Tell me what it is and what good would look like. I read everything and reply within a couple of days.",
+  "email": { "label": "hello@yourname.dev", "href": "mailto:hello@yourname.dev", "icon": "atSign" },
+  "links": [
+    {
+      "label": "GitHub",
+      "value": "@your-handle",
+      "href": "https://github.com/your-handle",
+      "icon": "github"
+    },
+    {
+      "label": "LinkedIn",
+      "value": "in/your-handle",
+      "href": "https://www.linkedin.com/in/your-handle",
+      "icon": "linkedin"
+    },
+    {
+      "label": "X",
+      "value": "@your-handle",
+      "href": "https://x.com/your-handle",
+      "icon": "x"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# The whole-repo gates. `pnpm build` is deliberately not here: it takes minutes.
+# `typecheck` runs `next typegen` first — without it, tsc cannot see Next's
+# generated route types (`LayoutProps`) on a clone that has never been built.
+pnpm lint
+pnpm format:check
+pnpm typecheck

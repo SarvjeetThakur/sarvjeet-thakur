@@ -1,0 +1,104 @@
+[
+  {
+    "slug": "ledgerline",
+    "title": "Ledgerline",
+    "summary": "Double-entry accounting for small businesses, rebuilt so a month-end close takes an afternoon instead of a week.",
+    "year": "2026",
+    "role": "Lead engineer",
+    "href": "https://example.com/ledgerline",
+    "featured": true,
+    "tags": ["Next.js", "Postgres", "TypeScript"],
+    "metric": { "value": "12k", "label": "monthly users" },
+    "image": {
+      "src": "/projects/a-analytics.jpg",
+      "alt": "Analytics dashboard showing load time and bounce rate charts on a laptop screen",
+      "width": 1600,
+      "height": 1067
+    }
+  },
+  {
+    "slug": "fieldnote",
+    "title": "Fieldnote",
+    "summary": "Offline-first survey app for teams working where the signal drops. Conflict-free sync when they surface.",
+    "year": "2025",
+    "role": "Founding engineer",
+    "href": "https://example.com/fieldnote",
+    "featured": true,
+    "tags": ["React Native", "CRDT", "SQLite"],
+    "metric": { "value": "0", "label": "sync conflicts" },
+    "image": {
+      "src": "/projects/d-mobile.jpg",
+      "alt": "Person using a laptop and phone side by side at a cafe counter",
+      "width": 1600,
+      "height": 1067
+    }
+  },
+  {
+    "slug": "pigment",
+    "title": "Pigment",
+    "summary": "A colour-system generator that checks perceptual contrast as you design, so palettes ship accessible by default.",
+    "year": "2025",
+    "role": "Design engineer",
+    "href": "https://example.com/pigment",
+    "featured": false,
+    "tags": ["WASM", "Rust", "Canvas"],
+    "metric": { "value": "AAA", "label": "contrast by default" },
+    "image": {
+      "src": "/projects/f-design.jpg",
+      "alt": "Large monitor showing a web layout open in a design tool",
+      "width": 1600,
+      "height": 1200
+    }
+  },
+  {
+    "slug": "halftone",
+    "title": "Halftone",
+    "summary": "Real-time image dithering in the browser. WebGL shaders that hold 60fps on a mid-range phone.",
+    "year": "2024",
+    "role": "Solo",
+    "href": "https://example.com/halftone",
+    "featured": false,
+    "tags": ["WebGL", "GLSL", "Workers"],
+    "metric": { "value": "60fps", "label": "on mid-range mobile" },
+    "image": {
+      "src": "/projects/c-code.jpg",
+      "alt": "Code editor open on a laptop in a dark room",
+      "width": 1600,
+      "height": 1067
+    }
+  },
+  {
+    "slug": "northpass",
+    "title": "Northpass",
+    "summary": "Deploy tooling for a platform team of sixty. Preview environments in under ninety seconds, every pull request.",
+    "year": "2024",
+    "role": "Platform engineer",
+    "href": "https://example.com/northpass",
+    "featured": false,
+    "tags": ["Go", "Kubernetes", "CI"],
+    "metric": { "value": "90s", "label": "to a live preview" },
+    "image": {
+      "src": "/projects/e-terminal.jpg",
+      "alt": "Terminal and source code on a developer's screen",
+      "width": 1600,
+      "height": 1067
+    }
+  },
+  {
+    "slug": "signalboard",
+    "title": "Signalboard",
+    "summary": "An operations wall for a hardware studio: every device on the bench, live, on one screen nobody has to refresh.",
+    "year": "2023",
+    "role": "Lead engineer",
+    "href": "https://example.com/signalboard",
+    "featured": false,
+    "tags": ["WebSockets", "Redis", "React"],
+    "metric": { "value": "200ms", "label": "end-to-end latency" },
+    "image": {
+      "src": "/projects/b-dashboard.jpg",
+      "alt": "Laptop displaying a stock market dashboard with charts",
+      "width": 1600,
+      "height": 1067
+    }
+  }
+]

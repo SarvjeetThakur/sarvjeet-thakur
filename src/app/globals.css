@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/*
+ * `physics:` styles apply only while physics mode is running.
+ * Unprefixed classes are the normal, scrollable document.
+ */
+@custom-variant physics (&:where([data-physics-mode="on"] *));
+
+/* Physics turns the page into a playground, so the document must not scroll. */
+html:has(body[data-physics-mode="on"]) {
+  overflow: hidden;
+}
+
+/*
+ * The page is a single column and never scrolls sideways. Physics bodies and
+ * the WebGL canvas are sized at runtime and can briefly exceed the viewport,
+ * which on mobile makes the browser widen the layout viewport for good.
+ */
+html,
+body {
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+}

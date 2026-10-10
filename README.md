@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+A personal portfolio with two modes in one page. By default it is a scrolling
+document over a live 3D starfield. A control-bar toggle turns it into physics
+mode: an infinite canvas where the cards, chips and headings become rigid
+bodies you can pan, zoom, drag and throw. Both modes read the same content and
+the same DOM, and the page is fully readable with JavaScript disabled.
 
-First, run the development server:
+Next.js (App Router), React, TypeScript, Tailwind, three.js, matter-js, pnpm.
+
+## Running it
+
+Node 20.9 or newer, and pnpm (the version is pinned in `package.json`).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install     # also installs the git hooks, via the prepare script
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`pnpm dev` starts two processes side by side:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next on <http://localhost:3000>
+- the live-presence websocket server on port 3001
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Presence is optional. With its server stopped the site behaves exactly as it
+does with it running, minus the cursors — so `pnpm dev:next` alone is fine.
 
-## Learn More
+## Configuration
 
-To learn more about Next.js, take a look at the following resources:
+Copy `.env.example` to `.env.local`. Everything has a working default for
+local development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable                    | Default                 | Used for                                 |
+| --------------------------- | ----------------------- | ---------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`      | Vercel domain, or local | Canonical URL, sitemap, robots, OG image |
+| `NEXT_PUBLIC_PRESENCE_URL`  | unset (presence off)    | The presence websocket, in production    |
+| `NEXT_PUBLIC_PRESENCE_PORT` | `3001`                  | The presence websocket, in development   |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying
 
-## Deploy on Vercel
+Vercel needs no configuration: Next is detected, and `NEXT_PUBLIC_SITE_URL`
+falls back to the project's production domain, so it is only required for a
+custom domain. Every route prerenders to static output.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`server/presence.mjs` does **not** run on Vercel — it is a long-lived
+WebSocket server, and serverless functions cannot hold a socket open. With
+`NEXT_PUBLIC_PRESENCE_URL` unset, presence stays off and the site behaves
+exactly as it does with the server stopped: no cursors, nothing else missing,
+no failing connection attempts. To have it, deploy that one file to a host
+that keeps a process alive (Fly, Railway, Render, a VPS) and point
+`NEXT_PUBLIC_PRESENCE_URL` at it.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Content
+
+There is no copy in the components. Everything — text, links, icon names,
+image paths and alt text — lives in `src/modules/portfolio/content/*.json`,
+typed in `types.ts`. Editing those four files changes the site.
+
+The checked-in content is a placeholder: it reads `Your Name`, points at
+`example.com` and uses stock images. Replace it before deploying.
+
+## Scripts
+
+| Script           | What it does                            |
+| ---------------- | --------------------------------------- |
+| `pnpm dev`       | Next plus the presence server           |
+| `pnpm build`     | Production build (several minutes)      |
+| `pnpm lint`      | oxlint; a warning fails it              |
+| `pnpm format`    | oxfmt, including Tailwind class sorting |
+| `pnpm typecheck` | `next typegen` then `tsc --noEmit`      |
+| `pnpm dev:next`  | Next only                               |
+| `pnpm dev:ws`    | The presence server only                |
+
+`pnpm typecheck` runs `next typegen` first on purpose: without it `tsc` cannot
+see Next's generated route types and fails on a clone that has never been built.
+
+## Hooks
+
+Husky is installed by `pnpm install`. `pre-commit` formats and lints the staged
+files; `pre-push` runs lint, format check and typecheck across the repo.
+`pnpm build` is not a hook — it takes minutes — so run it yourself before
+calling work done.
+
+## Layout
+
+```
+src/app/         route composition, metadata, robots, sitemap, OG image
+src/modules/     one folder per feature, each with its own public index.ts
+  space/         the three.js starfield
+  portfolio/     content, sections and the control bar
+  physics/       the matter-js canvas, camera and engine
+  presence/      live cursors over a websocket
+  mode/          which mode is running
+  theme/         light and dark
+  shared/        Icon, Reveal, Section, hooks
+src/styles/      design tokens
+server/          the presence websocket server
+```
+
+A module is imported only through its index (`@/modules/physics`), never its
+internals — enforced by lint, not convention.
+
+## Rules
+
+Every rule an agent or a contributor needs is in two files:
+
+- [AGENTS.md](AGENTS.md) — working rules, architecture, quality gates, git
+- [DESIGN.md](DESIGN.md) — tokens, themes, motion, layout, physics, presence

@@ -1,3 +1,4 @@
 allowBuilds:
+  # A transitive dependency of next with no install script; denying its build
+  # changes nothing but suppresses the approval prompt.
   sharp: false
-  unrs-resolver: false

@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    // Only server/**/*.mjs is matched by `include`, so this checks the presence
+    // server and nothing else.
+    "checkJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -28,7 +31,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "server/**/*.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".claude"]
 }

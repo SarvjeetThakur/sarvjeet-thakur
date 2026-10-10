@@ -1,5 +1,8 @@
 {
-  "editor.defaultFormatter": "oxc.oxc-vscode",
+  // .gitattributes keeps LF in git; this keeps LF in files VS Code writes.
+  "files.eol": "\n",
+  // Scoped per language rather than set globally: a global default formatter
+  // pointed oxfmt at every file type, including ones it does not handle.
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
@@ -9,5 +12,8 @@
   "[javascript][javascriptreact][typescript][typescriptreact][json][jsonc][css][markdown][yaml]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // Without this VS Code keeps its bundled TypeScript, so `tsdk` above is
+  // ignored and the Next TS plugin in tsconfig.json never loads.
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

@@ -1,0 +1,2 @@
+# Format and lint only what is being committed. lint-staged restages the fixes.
+pnpm exec lint-staged

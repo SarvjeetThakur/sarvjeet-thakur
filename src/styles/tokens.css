@@ -1,0 +1,96 @@
+/*
+ * Every visual value lives here. Components use the Tailwind utilities
+ * generated from the @theme blocks at the bottom (bg-surface, text-muted,
+ * shadow-lift, rounded-card …), never a raw hex.
+ *
+ * Adding a theme = one :root[data-theme="<name>"] block with the colour
+ * tokens, plus its name in THEMES (src/modules/theme/constants.ts).
+ */
+
+/* Default: deep space */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #06070d;
+  --bg-2: #0a0c16;
+  --surface: rgb(255 255 255 / 4.5%);
+  --surface-strong: rgb(255 255 255 / 8%);
+  /* Opaque stand-in for --surface, used by physics bodies: see the note in
+   * DESIGN.md. A 4.5% white wash only reads as glass because of the blur
+   * behind it, and a moving body cannot afford that blur. */
+  --surface-solid: #141725;
+  --fg: #eceef6;
+  --muted: #8d93a8;
+  --line: rgb(255 255 255 / 10%);
+  --line-strong: rgb(255 255 255 / 18%);
+  --accent: #7c6cff;
+  --accent-2: #4dd9ff;
+  --accent-fg: #06070d;
+  /* Dot grid on the physics canvas. */
+  --dot: rgb(255 255 255 / 13%);
+
+  --lift: 0 1px 0 rgb(255 255 255 / 6%) inset, 0 18px 40px -24px rgb(0 0 0 / 90%);
+  --glow: 0 0 0 1px rgb(124 108 255 / 35%), 0 20px 60px -20px rgb(124 108 255 / 45%);
+  --star: #ffffff;
+}
+
+/* Daylight */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f4f3f8;
+  --bg-2: #ffffff;
+  --surface: rgb(255 255 255 / 75%);
+  --surface-strong: #ffffff;
+  --surface-solid: #ffffff;
+  --fg: #14131c;
+  --muted: #5d5b6c;
+  --line: rgb(20 19 28 / 10%);
+  --line-strong: rgb(20 19 28 / 18%);
+  --accent: #5b45e0;
+  /* Darkened from #0d8fb8: that was 3.37:1 on --bg, and this token is used
+   * for small text (the section index), which needs 4.5:1. */
+  --accent-2: #0a6f90;
+  --accent-fg: #ffffff;
+  --dot: rgb(20 19 28 / 15%);
+
+  --lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 16px 36px -26px rgb(20 19 28 / 45%);
+  --glow: 0 0 0 1px rgb(91 69 224 / 28%), 0 20px 60px -24px rgb(91 69 224 / 35%);
+  --star: #3a3550;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-solid: var(--surface-solid);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-fg: var(--accent-fg);
+
+  --shadow-lift: var(--lift);
+  --shadow-glow: var(--glow);
+
+  /* --font-space-grotesk is set by next/font in the root layout */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  --radius-card: 16px;
+  --radius-chip: 999px;
+
+  --text-display: clamp(2.75rem, 1.2rem + 6.4vw, 6.5rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.04em;
+
+  --text-section: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  --text-section--line-height: 1.05;
+  --text-section--letter-spacing: -0.03em;
+}

@@ -1,14 +1,20 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["nextjs", "typescript", "react", "import", "jsx-a11y"],
-  "categories": {
-    "correctness": "off"
-  },
+  // Node globals are NOT in scope by default: `process`, `Buffer` and
+  // `__dirname` in a "use client" file break at runtime, and a project-wide
+  // `node: true` meant nothing flagged them. They are re-enabled below for
+  // the files that really are Node.
   "env": {
     "builtin": true,
-    "browser": true,
-    "node": true
+    "browser": true
   },
+  "overrides": [
+    {
+      "files": ["server/**", "*.config.ts", "*.mjs", "src/app/sitemap.ts", "src/app/robots.ts"],
+      "env": { "node": true }
+    }
+  ],
   "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts", ".claude/**"],
   "rules": {
     "no-array-constructor": "error",
@@ -88,6 +94,13 @@
     "react/unsupported-syntax": "warn",
 
     "import/no-anonymous-default-export": "warn",
+    "import/no-cycle": "error",
+
+    // AGENTS.md: import another module only through its index, never its
+    // internals. The doubled wildcard is required: a single one does not cross
+    // a slash. Intra-module imports are relative, so only cross-module deep
+    // imports match.
+    "no-restricted-imports": ["error", { "patterns": ["@/modules/*/**"] }],
 
     "jsx-a11y/alt-text": ["warn", { "elements": ["img"], "img": ["Image"] }],
     "jsx-a11y/aria-props": "warn",

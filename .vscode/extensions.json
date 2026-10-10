@@ -1,4 +1,10 @@
 {
-  "recommendations": ["oxc.oxc-vscode"],
+  "recommendations": [
+    "oxc.oxc-vscode",
+    // Tailwind-first project: without this there is no class completion.
+    "bradlc.vscode-tailwindcss",
+    // VS Code does not read .editorconfig without it.
+    "EditorConfig.EditorConfig"
+  ],
   "unwantedRecommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
 }

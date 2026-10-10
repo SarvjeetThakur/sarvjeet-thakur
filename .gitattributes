@@ -1,0 +1,20 @@
+# One line ending everywhere. Text is stored and checked out as LF on every
+# platform, so a Windows clone does not have to set core.autocrlf: these
+# attributes override it. A CRLF checkout makes `oxfmt --check` fail and turns
+# every diff into a whole-file rewrite.
+* text=auto eol=lf
+
+# Binary: never normalised, never diffed as text.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.woff2 binary
+*.mp4 binary
+
+# Generated: no diff noise, excluded from language stats.
+pnpm-lock.yaml -diff linguist-generated
+skills-lock.json -diff linguist-generated
