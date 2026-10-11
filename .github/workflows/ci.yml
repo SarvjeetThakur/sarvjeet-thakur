@@ -1,6 +1,6 @@
-# The same four gates AGENTS.md requires before calling work done. The git
-# hooks run the first three locally; this is what catches a push that skipped
-# them, and it is the only place `pnpm build` runs automatically.
+# The gates AGENTS.md requires before calling work done. The git hooks run
+# lint, format and typecheck locally; this is what catches a push that skipped
+# them, and it is the only place `pnpm build` and `pnpm e2e` run automatically.
 name: CI
 
 on:
@@ -40,3 +40,44 @@ jobs:
           # This does NOT configure the deployed site: Vercel runs its own
           # build and reads its own environment.
           NEXT_PUBLIC_SITE_URL: https://sarvjeet-thakur.vercel.app
+
+  e2e:
+    # Independent of `check` so both report in parallel; it repeats the build
+    # because it needs one pinned to the URL it will actually be served on.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+        env:
+          # localhost, not the production domain: the suite asserts that the
+          # canonical matches the origin it is served from, and the absolute
+          # URLs are baked in at build time.
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+      # Backgrounded in its own step so it survives into the next one.
+      - name: Start the production server
+        run: pnpm start > /tmp/next.log 2>&1 &
+
+      - name: Wait for it to answer
+        run: |
+          for i in $(seq 1 60); do
+            curl -sfo /dev/null http://localhost:3000 && echo "up after ${i}s" && exit 0
+            sleep 1
+          done
+          echo "server never answered"; cat /tmp/next.log; exit 1
+
+      - run: pnpm e2e http://localhost:3000
+
+      - name: Server log on failure
+        if: failure()
+        run: cat /tmp/next.log

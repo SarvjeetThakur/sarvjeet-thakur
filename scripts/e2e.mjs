@@ -133,6 +133,14 @@ const run = async () => {
     (sitemap.body.match(/<loc>/g) ?? []).length === 2,
     `${(sitemap.body.match(/<loc>/g) ?? []).length} urls`,
   );
+
+  // A trailing slash on NEXT_PUBLIC_SITE_URL once produced `app//resume`.
+  const locs = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  check(
+    "no doubled slash in sitemap",
+    locs.every((u) => !/[^:]\/\//.test(u)),
+    locs.join(" "),
+  );
   const pdfHead = await fetch(BASE + "/sarvjeet-thakur-resume.pdf", { method: "HEAD" });
   check(
     "PDF is noindex",
@@ -169,6 +177,12 @@ const run = async () => {
       nodes.filter((n) => n["@type"] === "CreativeWork" && n.url).length === 4,
     );
     check(`${path} escaped for inline script`, !raw.includes("</script"));
+    const ids = nodes.map((n) => n["@id"]).filter(Boolean);
+    check(
+      `${path} no doubled slash in @id`,
+      ids.every((u) => !/[^:]\/\//.test(u)),
+      ids[0],
+    );
   }
 
   /* ---------- caching / assets ---------- */
