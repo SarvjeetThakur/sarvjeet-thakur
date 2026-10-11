@@ -50,6 +50,17 @@ no failing connection attempts. To have it, deploy that one file to a host
 that keeps a process alive (Fly, Railway, Render, a VPS) and point
 `NEXT_PUBLIC_PRESENCE_URL` at it.
 
+## Not a PWA, on purpose
+
+There is a web app manifest (`src/app/manifest.ts`) so a saved home-screen
+entry gets the right name and icon. There is deliberately **no service
+worker**. A portfolio is read once or twice by people who arrive from a link
+and leave; offline support and push have no audience here, and the real cost
+of a service worker is that a stale one serves a recruiter last month's build.
+Vercel's CDN already makes first load fast, which is the only load that
+matters. Chrome needs a service worker before it offers installation, so the
+manifest alone adds no install prompt and no caching risk.
+
 ## Content
 
 There is no copy in the components. Everything — text, links, icon names,
