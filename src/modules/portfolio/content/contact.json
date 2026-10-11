@@ -1,25 +1,29 @@
 {
   "lead": "Have something that needs building?",
-  "body": "Tell me what it is and what good would look like. I read everything and reply within a couple of days.",
-  "email": { "label": "hello@yourname.dev", "href": "mailto:hello@yourname.dev", "icon": "atSign" },
+  "body": "I read everything that arrives and reply within a couple of days. Email is the surest way to reach me.",
+  "email": {
+    "label": "sarvjeetthakur34@gmail.com",
+    "href": "mailto:sarvjeetthakur34@gmail.com",
+    "icon": "atSign"
+  },
   "links": [
     {
       "label": "GitHub",
-      "value": "@your-handle",
-      "href": "https://github.com/your-handle",
+      "value": "SarvjeetThakur",
+      "href": "https://github.com/SarvjeetThakur",
       "icon": "github"
     },
     {
       "label": "LinkedIn",
-      "value": "in/your-handle",
-      "href": "https://www.linkedin.com/in/your-handle",
+      "value": "sarvjeet-thakur",
+      "href": "https://www.linkedin.com/in/sarvjeet-thakur-aab822258",
       "icon": "linkedin"
     },
     {
-      "label": "X",
-      "value": "@your-handle",
-      "href": "https://x.com/your-handle",
-      "icon": "x"
+      "label": "Résumé",
+      "value": "PDF, three pages",
+      "href": "/sarvjeet-thakur-resume.pdf",
+      "icon": "download"
     }
   ]
 }

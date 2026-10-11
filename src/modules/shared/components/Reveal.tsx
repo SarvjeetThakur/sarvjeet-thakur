@@ -11,12 +11,7 @@ type RevealProps = {
   children: ReactNode;
 };
 
-/**
- * idle  — never animated (no JS, reduced motion, or already on screen)
- * hidden — waiting to scroll into view
- * shown  — animating in
- * done   — settled; all transform classes dropped
- */
+/** idle: never animated. hidden -> shown -> done: the one-time reveal. */
 type State = "idle" | "hidden" | "shown" | "done";
 
 /**
@@ -39,7 +34,6 @@ export function Reveal({ delay = 0, className, children }: RevealProps) {
     if (!el) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Already on screen: leave it alone rather than animating it in late.
     if (el.getBoundingClientRect().top < window.innerHeight) return;
 
     setState("hidden");
@@ -66,10 +60,7 @@ export function Reveal({ delay = 0, className, children }: RevealProps) {
       data-reveal={settled ? "done" : state}
       style={state === "shown" ? { transitionDelay: `${delay}s` } : undefined}
       onTransitionEnd={(event) => {
-        // `transitionend` bubbles, and the cards and chips inside have their
-        // own colour and transform transitions. Without this guard, hovering
-        // a card mid-reveal settles the wrapper early and the group jumps
-        // into place instead of easing in.
+        // `transitionend` bubbles: a child's hover transition would settle this early.
         if (event.target === event.currentTarget) setState("done");
       }}
       className={`${

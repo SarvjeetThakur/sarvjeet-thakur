@@ -1,104 +1,158 @@
 [
   {
-    "slug": "ledgerline",
-    "title": "Ledgerline",
-    "summary": "Double-entry accounting for small businesses, rebuilt so a month-end close takes an afternoon instead of a week.",
-    "year": "2026",
-    "role": "Lead engineer",
-    "href": "https://example.com/ledgerline",
+    "slug": "fyntiq",
+    "domain": "Fintech",
+    "title": "Fyntiq",
+    "role": "Front end and transaction flows",
+    "summary": "A US financial platform with three connected products on one network: a consumer wallet for holding, sending and spending across borders, a business platform for invoicing and accounting, and pay-at-the-table for restaurants. I built responsive product interfaces and the secure transaction flows that run through them.",
+    "href": "https://www.fyntiq.com/",
     "featured": true,
-    "tags": ["Next.js", "Postgres", "TypeScript"],
-    "metric": { "value": "12k", "label": "monthly users" },
+    "tags": ["React", "Next.js", "TypeScript", "Node.js", "AWS"],
+    "metric": {
+      "value": "3",
+      "label": "connected products, one network"
+    },
+    "image": {
+      "src": "/projects/fyntiq.jpg",
+      "alt": "The Fyntiq home page, headlined “Pick your Fyntiq”, with cards for its wallet, business and restaurant products",
+      "width": 1600,
+      "height": 1000
+    }
+  },
+  {
+    "slug": "addlly-ai",
+    "domain": "AI SaaS",
+    "title": "Addlly AI",
+    "role": "Application interface and API integrations",
+    "summary": "An enterprise AI marketing platform whose brand-trained agents create, optimise and audit content for visibility in ChatGPT, Perplexity and Google. I worked on the application interface and the API integrations behind one-click blog, social and newsletter generation.",
+    "href": "https://addlly.ai/",
+    "featured": true,
+    "tags": ["React", "Next.js", "Node.js", "REST APIs", "LLM integrations"],
+    "metric": {
+      "value": "One click",
+      "label": "blog, social and newsletter"
+    },
+    "image": {
+      "src": "/projects/addlly.jpg",
+      "alt": "The Addlly AI home page, headlined “The AI Search Visibility Platform for Enterprise Brands”",
+      "width": 1600,
+      "height": 1000
+    }
+  },
+  {
+    "slug": "apms",
+    "domain": "Government",
+    "title": "APMS",
+    "role": "Secure administrative console",
+    "summary": "A platform for the Georgian Ministry of Environmental Protection and Agriculture that administers state agricultural support programmes end to end: applicant intake, beneficiary verification, document management, approval workflow and disbursement tracking. I delivered the administrative console, with multi-role permissions, a multilingual UI and exportable reporting for ministry staff.",
+    "featured": false,
+    "tags": ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL", "AWS"],
+    "metric": {
+      "value": "End to end",
+      "label": "intake to disbursement"
+    },
+    "image": {
+      "src": "/projects/b-dashboard.jpg",
+      "alt": "A laptop showing a data dashboard with charts, standing in for the ministry console, which is not public",
+      "width": 1600,
+      "height": 1067
+    }
+  },
+  {
+    "slug": "mes",
+    "domain": "Government",
+    "title": "M&ES",
+    "role": "Indicator management and reporting",
+    "summary": "A planning, monitoring and evaluation platform for the same ministry, tracking programme indicators and results across national agriculture and rural-development strategies. I built the indicator-management, data-entry and reporting modules, with dashboards that let departments and donor partners watch progress against targets.",
+    "featured": false,
+    "tags": ["React", "Node.js", "NestJS", "PostgreSQL", "Charts"],
+    "metric": {
+      "value": "National",
+      "label": "programme indicators"
+    },
     "image": {
       "src": "/projects/a-analytics.jpg",
-      "alt": "Analytics dashboard showing load time and bounce rate charts on a laptop screen",
+      "alt": "A laptop showing analytics charts, standing in for the monitoring platform, which is not public",
       "width": 1600,
       "height": 1067
     }
   },
   {
-    "slug": "fieldnote",
-    "title": "Fieldnote",
-    "summary": "Offline-first survey app for teams working where the signal drops. Conflict-free sync when they surface.",
-    "year": "2025",
-    "role": "Founding engineer",
-    "href": "https://example.com/fieldnote",
-    "featured": true,
-    "tags": ["React Native", "CRDT", "SQLite"],
-    "metric": { "value": "0", "label": "sync conflicts" },
+    "slug": "wrb",
+    "domain": "Health tech",
+    "title": "WRB",
+    "role": "Admissions and record management",
+    "summary": "A national ward record system that replaces paper ward books with structured electronic patient records, so clinical staff work from one accurate source. I implemented the patient admission and record-management modules, role-based clinical access and audit-ready data handling.",
+    "href": "https://app.wrb.crossnode.it/",
+    "featured": false,
+    "tags": ["React", "Node.js", "NestJS", "MySQL", "Docker"],
+    "metric": {
+      "value": "Paper free",
+      "label": "ward records"
+    },
     "image": {
       "src": "/projects/d-mobile.jpg",
-      "alt": "Person using a laptop and phone side by side at a cafe counter",
+      "alt": "A laptop and phone side by side on a counter, standing in for the clinical record system, whose screens are behind a client login",
       "width": 1600,
       "height": 1067
     }
   },
   {
-    "slug": "pigment",
-    "title": "Pigment",
-    "summary": "A colour-system generator that checks perceptual contrast as you design, so palettes ship accessible by default.",
-    "year": "2025",
-    "role": "Design engineer",
-    "href": "https://example.com/pigment",
+    "slug": "solstice-health",
+    "domain": "Health tech",
+    "title": "Solstice Health",
+    "role": "Review dashboards and workflows",
+    "summary": "An AI-native platform for life-sciences and biopharma marketing teams that pre-screens content against medical-legal-regulatory requirements, turning a compliance review that took weeks into one that takes minutes. I built the interactive dashboards and the review workflows for evaluation, versioning and collaborative sign-off.",
     "featured": false,
-    "tags": ["WASM", "Rust", "Canvas"],
-    "metric": { "value": "AAA", "label": "contrast by default" },
+    "tags": ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL"],
+    "metric": {
+      "value": "Weeks to minutes",
+      "label": "MLR compliance review"
+    },
     "image": {
       "src": "/projects/f-design.jpg",
-      "alt": "Large monitor showing a web layout open in a design tool",
+      "alt": "A large monitor showing a layout open in a design tool, standing in for the review platform, which is behind a login",
       "width": 1600,
       "height": 1200
     }
   },
   {
-    "slug": "halftone",
-    "title": "Halftone",
-    "summary": "Real-time image dithering in the browser. WebGL shaders that hold 60fps on a mid-range phone.",
-    "year": "2024",
-    "role": "Solo",
-    "href": "https://example.com/halftone",
+    "slug": "giftxd",
+    "domain": "Fintech and crypto",
+    "title": "GiftXD",
+    "role": "Trading interface and wallet flows",
+    "summary": "A marketplace that converts gift cards into cryptocurrency, with a matching engine that surfaces the best available exchange rate. I developed the trading interface, the offer matching screens and the wallet integration flows.",
     "featured": false,
-    "tags": ["WebGL", "GLSL", "Workers"],
-    "metric": { "value": "60fps", "label": "on mid-range mobile" },
-    "image": {
-      "src": "/projects/c-code.jpg",
-      "alt": "Code editor open on a laptop in a dark room",
-      "width": 1600,
-      "height": 1067
-    }
-  },
-  {
-    "slug": "northpass",
-    "title": "Northpass",
-    "summary": "Deploy tooling for a platform team of sixty. Preview environments in under ninety seconds, every pull request.",
-    "year": "2024",
-    "role": "Platform engineer",
-    "href": "https://example.com/northpass",
-    "featured": false,
-    "tags": ["Go", "Kubernetes", "CI"],
-    "metric": { "value": "90s", "label": "to a live preview" },
+    "tags": ["React", "Node.js", "MongoDB", "REST APIs"],
+    "metric": {
+      "value": "Best rate",
+      "label": "offer matching engine"
+    },
     "image": {
       "src": "/projects/e-terminal.jpg",
-      "alt": "Terminal and source code on a developer's screen",
+      "alt": "Source code on a dark screen, standing in for the trading interface, which is not public",
       "width": 1600,
       "height": 1067
     }
   },
   {
-    "slug": "signalboard",
-    "title": "Signalboard",
-    "summary": "An operations wall for a hardware studio: every device on the bench, live, on one screen nobody has to refresh.",
-    "year": "2023",
-    "role": "Lead engineer",
-    "href": "https://example.com/signalboard",
+    "slug": "snt-global",
+    "domain": "Logistics",
+    "title": "SnT Global",
+    "role": "Order tracking and inventory",
+    "summary": "A single-dashboard logistics product giving clients real-time visibility to view, track and manage inventory and orders across Southeast Asia. I implemented the order-tracking dashboard, the inventory modules and role-based client access.",
+    "href": "https://sntglobal.com/",
     "featured": false,
-    "tags": ["WebSockets", "Redis", "React"],
-    "metric": { "value": "200ms", "label": "end-to-end latency" },
+    "tags": ["React", "Node.js", "Express", "MySQL"],
+    "metric": {
+      "value": "Real time",
+      "label": "inventory and orders"
+    },
     "image": {
-      "src": "/projects/b-dashboard.jpg",
-      "alt": "Laptop displaying a stock market dashboard with charts",
+      "src": "/projects/snt-global.jpg",
+      "alt": "The SnT Global home page, headlined “Take charge of your logistics”, over a photograph of a fulfilment warehouse",
       "width": 1600,
-      "height": 1067
+      "height": 1000
     }
   }
 ]

@@ -23,7 +23,6 @@ export function PhysicsStage() {
   const grabbed = useRef(false);
   const enabled = usePhysicsMode();
   const [ready, setReady] = useState(false);
-  // Bumped on a real viewport change, which rebuilds the world below.
   const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
@@ -33,12 +32,11 @@ export function PhysicsStage() {
     let cancelled = false;
 
     function onTap(el: HTMLElement) {
-      // The stage covers the page, so a confirmed tap is what follows a link.
       const link = el instanceof HTMLAnchorElement ? el : el.querySelector("a");
       link?.click();
     }
 
-    // matter-js is only downloaded when physics is actually switched on.
+    // matter-js is only downloaded when physics is switched on.
     void import("../lib/engine").then(({ createPhysics }) => {
       if (cancelled) return;
       controller.current = createPhysics(stage, onTap);
@@ -56,15 +54,10 @@ export function PhysicsStage() {
   }, [enabled, generation]);
 
   /*
-   * The world — walls, floors, region boxes and every body's size — is
-   * measured once when the engine starts, so a resize or a rotation would
-   * otherwise leave the walls on the old screen edges and the floors at the
-   * wrong world height. Rebuilding re-measures everything, at the cost of
-   * returning the bodies to their laid-out positions.
-   *
-   * Height alone has to move by more than the slack: a mobile URL bar
-   * collapsing fires resize constantly and must not reset the canvas
-   * under the reader's hand.
+   * The world is measured once, so a resize leaves the walls and floors in the
+   * wrong place. Rebuilding re-measures, at the cost of resetting positions.
+   * Height alone must move by more than the slack, or a mobile URL bar
+   * collapsing resets the canvas under the reader's hand.
    */
   useEffect(() => {
     if (!enabled) return;
@@ -137,14 +130,9 @@ export function PhysicsStage() {
   return (
     <>
       {/*
-        The grid and the input surface are siblings at different depths, and
-        they have to be: the stage must sit above the bodies to receive the
-        gestures, so a grid *inside* it would paint over the cards. This sits
-        below the bodies (z-index 5) and above the starfield (-z-10).
-
-        The negative inset is the one-tile overhang that lets the camera move
-        it by a transform without exposing an edge, so it must stay larger
-        than GRID_STEP x ZOOM_MAX.
+        Siblings, not nested: the stage sits above the bodies to receive
+        gestures, so a grid inside it would paint over the cards. The negative
+        inset is the one-tile overhang, and must exceed GRID_STEP x ZOOM_MAX.
       */}
       <div
         {...{ [GRID_ATTR]: "" }}

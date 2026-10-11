@@ -1,40 +1,63 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /*
-   * Testing on a real phone means loading the dev server by LAN IP, and
-   * Next blocks its dev assets from any other origin by default: the page
-   * renders but no JavaScript loads, so nothing hydrates. Private ranges
-   * only, and `allowedDevOrigins` has no effect on a production build.
-   *
-   * A `*` matches exactly one dot-separated label, so `172.16.*.*` covered
-   * only one sixteenth of its private range and left out Docker Desktop's
-   * default bridge and WSL — the exact 403 this list exists to prevent.
-   */
-  allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*", "*.local"],
   cacheComponents: true,
-  /*
-   * Not a behaviour switch: Next's own types say `false` or omitted "does
-   * nothing". What it does do is opt out explicitly, which suppresses the
-   * "adopting partial prefetching" notice on every build. This is a single
-   * page whose only links are hash anchors, so there is no route navigation
-   * whose shell could be prefetched.
-   */
+  images: {
+    // Next 16 defaults this to [75] and silently coerces anything else to the
+    // nearest entry, so `quality={100}` is ignored unless listed here.
+    qualities: [75, 100],
+  },
+  // A no-op per Next's own types; set only to silence the adoption notice.
   partialPrefetching: false,
   experimental: {
-    /*
-     * Both are barrels with no `exports` map for subpaths worth relying on:
-     * drei re-exports the whole library from one entry point, and the icon
-     * pack is ~25MB for the three brand marks used here. Next's default list
-     * already covers `lucide-react`, and user entries are merged ahead of it.
-     */
+    // Both are single-entry barrels; lucide is already on Next's default list.
     optimizePackageImports: ["@react-three/drei", "@icons-pack/react-simple-icons"],
+  },
+  // Drops the `X-Powered-By: Next.js` version fingerprint.
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          /*
+           * `'unsafe-inline'` is unavoidable: next-themes, Next's navigation
+           * script and the flight payload all ship inline, and a nonce would
+           * force dynamic rendering on a fully static page. The directives
+           * it does not weaken — frame-ancestors, base-uri, object-src — are
+           * the ones worth having, so the policy still earns its place.
+           */
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob:",
+              "font-src 'self' https://fonts.gstatic.com",
+              "connect-src 'self' ws: wss:",
+              "frame-ancestors 'none'",
+              "base-uri 'none'",
+              "object-src 'none'",
+              "upgrade-insecure-requests",
+            ].join("; "),
+          },
+        ],
+      },
+      // The PDF duplicates `/resume`, and Google indexes PDFs as pages.
+      {
+        source: "/sarvjeet-thakur-resume.pdf",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
   },
   reactCompiler: true,
   turbopack: {
     rules: {
       "*.css": {
-        // `as: "*.css"` would turn CSS Modules into global CSS, dropping their class names
+        // Without the condition, CSS Modules become global and lose their class names.
         condition: { not: { path: /\.module\.css$/ } },
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",

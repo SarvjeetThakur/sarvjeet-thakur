@@ -2,7 +2,8 @@
 
 import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
-import { CONTEXT_RESTORE_MS, DPR_RANGE } from "../constants";
+import { CAMERA_FOV, CAMERA_Z, CONTEXT_RESTORE_MS, DPR_RANGE } from "../constants";
+import { SolarSystem } from "./SolarSystem";
 import { Starfield } from "./Starfield";
 
 type StarfieldCanvasProps = { lite: boolean; still: boolean; paused: boolean };
@@ -20,23 +21,19 @@ export function StarfieldCanvas({ lite, still, paused }: StarfieldCanvasProps) {
     <Canvas
       dpr={DPR_RANGE}
       /*
-       * Stopping the motion is not the same as stopping the work: drei's
-       * `Stars` drives its own `useFrame`, so without this the scene would
-       * still be drawn sixty times a second with thousands of sprites under
-       * reduced motion, and again behind physics mode. "demand" renders once
-       * and then only when something asks.
+       * drei's `Stars` drives its own `useFrame`, so stopping the motion does
+       * not stop the work: without this the scene is still drawn 60x a second.
        */
       frameloop={still || paused ? "demand" : "always"}
       gl={{ antialias: false, powerPreference: "low-power", failIfMajorPerformanceCaveat: false }}
-      camera={{ position: [0, 0, 1], fov: 72 }}
+      camera={{ position: [0, 0, CAMERA_Z], fov: CAMERA_FOV }}
       onCreated={({ gl }) => {
         const canvas = gl.domElement;
-        let giveUp: ReturnType<typeof setTimeout>;
+        let giveUp: ReturnType<typeof setTimeout> | undefined;
         canvas.addEventListener("webglcontextlost", (event) => {
-          // Preventing the default is what makes a restore possible at all. A
-          // mobile GPU reclaimed on a tab switch loses the context and then
-          // gets it back, so wait before tearing the canvas down for good —
-          // the old code gave up on the first loss, permanently.
+          clearTimeout(giveUp);
+          // preventDefault is what makes a restore possible; a reclaimed GPU
+          // usually returns, so wait before giving up for good.
           event.preventDefault();
           giveUp = setTimeout(() => setFailed(true), CONTEXT_RESTORE_MS);
         });
@@ -44,6 +41,7 @@ export function StarfieldCanvas({ lite, still, paused }: StarfieldCanvasProps) {
       }}
     >
       <Starfield lite={lite} still={still} />
+      <SolarSystem lite={lite} still={still} />
     </Canvas>
   );
 }

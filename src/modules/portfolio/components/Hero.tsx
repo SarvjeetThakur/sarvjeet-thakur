@@ -1,8 +1,12 @@
 import { BodyKind, physicsProps, regionProps } from "@/modules/physics";
 import { Icon } from "@/modules/shared";
 import { site } from "../content";
+import { yearsSince } from "../lib/tenure";
 
-const { greeting, headline, intro, actions, stats, scrollHint } = site.hero;
+const { greeting, headline, intro, actions, physicsNote, stats, scrollHint } = site.hero;
+
+/* Module scope: resolved at build time. See `tenure.ts`. */
+const YEARS = String(yearsSince(site.career.startDate));
 
 export function Hero() {
   return (
@@ -14,17 +18,13 @@ export function Hero() {
       <div className="flex flex-col items-start gap-7">
         <p className="flex items-center gap-2.5 rounded-chip border border-line bg-surface py-1.5 pr-4 pl-3 text-sm text-muted backdrop-blur-xl">
           <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent-2 opacity-70 motion-reduce:hidden" />
-            <span className="relative inline-flex size-2 rounded-full bg-accent-2" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-status-open opacity-70 motion-reduce:hidden" />
+            <span className="relative inline-flex size-2 rounded-full bg-status-open" />
           </span>
           {greeting}
         </p>
 
-        {/*
-          The name and role are inside the h1, not only in <title>: the h1 is
-          the strongest on-page signal and spending all of it on the poster
-          line left nothing to rank the person for.
-        */}
+        {/* Name and role inside the h1: the poster line alone ranks for nothing. */}
         <h1 className="flex flex-col gap-4" {...physicsProps(BodyKind.Title)}>
           <span className="text-sm tracking-[0.18em] text-muted uppercase">
             {site.name} · {site.role}
@@ -48,12 +48,10 @@ export function Hero() {
               key={action.href}
               href={action.href}
               /*
-               * Bodies, so the two primary calls to action are still reachable
-               * in physics mode: `main` is hidden there and only bodies opt
-               * back in. The transition is narrowed for the same reason — a
-               * transition covering `transform` would fight the per-frame
-               * transform the engine writes.
-               */
+                Bodies, so the CTAs survive physics mode. The transition is
+                narrowed for the same reason: one covering `transform` would
+                fight the per-frame transform the engine writes.
+              */
               {...physicsProps(BodyKind.Chip)}
               className={`group inline-flex min-h-12 items-center gap-2.5 rounded-chip px-6 text-base font-medium transition-[background-color,border-color,box-shadow] ${
                 action.primary
@@ -69,18 +67,22 @@ export function Hero() {
             </a>
           ))}
         </div>
+
+        {/* The only place that says physics mode exists. Hidden once it is on. */}
+        <p className="flex max-w-[52ch] items-start gap-2.5 text-sm text-pretty text-muted physics:hidden">
+          <Icon name="pointer" className="mt-0.5 size-4 shrink-0 text-accent-2" />
+          {physicsNote}
+        </p>
       </div>
 
       <dl className="flex flex-wrap gap-x-10 gap-y-6 border-t border-line pt-8">
         {stats.map((stat) => (
-          /*
-           * The value is first in the DOM as well as visually. Reversing it
-           * with `order` made a screen reader read "Building for the web,
-           * 8 yrs" while the eye read "8 yrs / Building for the web".
-           */
+          /* Value first in the DOM as well as visually; `order` broke that. */
           <div key={stat.label} className="flex flex-col-reverse gap-1">
             <dt className="text-sm text-muted">{stat.label}</dt>
-            <dd className="font-display text-3xl font-bold tracking-tight">{stat.value}</dd>
+            <dd className="font-display text-3xl font-bold tracking-tight">
+              {stat.value.replace("{years}", YEARS)}
+            </dd>
           </div>
         ))}
       </dl>

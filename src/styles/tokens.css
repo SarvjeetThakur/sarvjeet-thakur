@@ -1,10 +1,7 @@
 /*
- * Every visual value lives here. Components use the Tailwind utilities
- * generated from the @theme blocks at the bottom (bg-surface, text-muted,
- * shadow-lift, rounded-card …), never a raw hex.
- *
- * Adding a theme = one :root[data-theme="<name>"] block with the colour
- * tokens, plus its name in THEMES (src/modules/theme/constants.ts).
+ * Every visual value lives here; components use the generated utilities,
+ * never a raw hex. A new theme is one :root[data-theme="<name>"] block plus
+ * its name in THEMES (src/modules/theme/constants.ts).
  */
 
 /* Default: deep space */
@@ -16,9 +13,7 @@
   --bg-2: #0a0c16;
   --surface: rgb(255 255 255 / 4.5%);
   --surface-strong: rgb(255 255 255 / 8%);
-  /* Opaque stand-in for --surface, used by physics bodies: see the note in
-   * DESIGN.md. A 4.5% white wash only reads as glass because of the blur
-   * behind it, and a moving body cannot afford that blur. */
+  /* Opaque stand-in for --surface: a moving body cannot afford a backdrop blur. */
   --surface-solid: #141725;
   --fg: #eceef6;
   --muted: #8d93a8;
@@ -27,6 +22,9 @@
   --accent: #7c6cff;
   --accent-2: #4dd9ff;
   --accent-fg: #06070d;
+  /* "Open to work": green reads as available in a way the accent does not. */
+  --status-open: #34d399;
+
   /* Dot grid on the physics canvas. */
   --dot: rgb(255 255 255 / 13%);
 
@@ -53,6 +51,7 @@
    * for small text (the section index), which needs 4.5:1. */
   --accent-2: #0a6f90;
   --accent-fg: #ffffff;
+  --status-open: #0b8457;
   --dot: rgb(20 19 28 / 15%);
 
   --lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 16px 36px -26px rgb(20 19 28 / 45%);
@@ -73,6 +72,7 @@
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-accent-fg: var(--accent-fg);
+  --color-status-open: var(--status-open);
 
   --shadow-lift: var(--lift);
   --shadow-glow: var(--glow);

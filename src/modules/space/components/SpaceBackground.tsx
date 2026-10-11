@@ -6,11 +6,8 @@ import { ErrorBoundary, useHydrated, useMediaQuery } from "@/modules/shared";
 import { COARSE_POINTER_QUERY, REDUCED_MOTION_QUERY } from "../constants";
 
 /*
- * three, fiber and drei are the heaviest thing the site loads, and the canvas
- * only ever mounts after hydration. Imported statically they would still sit
- * in the first client chunk and have to be parsed before the page hydrates,
- * even on a device that never starts a WebGL context. `ssr: false` costs
- * nothing here because of the `hydrated` gate below.
+ * Statically imported, three/fiber/drei sit in the first client chunk and are
+ * parsed before hydration even on a device that never starts WebGL.
  */
 const StarfieldCanvas = dynamic(
   () => import("./StarfieldCanvas").then((module) => module.StarfieldCanvas),
@@ -26,8 +23,7 @@ export function SpaceBackground() {
   const hydrated = useHydrated();
   const lite = useMediaQuery(COARSE_POINTER_QUERY);
   const still = useMediaQuery(REDUCED_MOTION_QUERY);
-  // In physics mode the reader is throwing cards around; a third animation
-  // loop redrawing the background is competing for the same frame budget.
+  // A third animation loop would compete with physics for the frame budget.
   const physics = usePhysicsMode();
 
   return (
@@ -39,8 +35,8 @@ export function SpaceBackground() {
           <StarfieldCanvas lite={lite} still={still} paused={physics} />
         </ErrorBoundary>
       ) : null}
-      {/* Darken the lower half so body text always has contrast. */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,color-mix(in_oklab,var(--bg)_72%,transparent)_55%,var(--bg)_100%)]" />
+      {/* A scrim for text contrast, not a lid: opaque would bury the stars. */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,color-mix(in_oklab,var(--bg)_28%,transparent)_45%,color-mix(in_oklab,var(--bg)_52%,transparent)_100%)]" />
     </div>
   );
 }

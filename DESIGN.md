@@ -36,6 +36,9 @@ A moving body cannot afford that blur — a backdrop filter on something that ge
 
 ## Motion
 
+- A small solar system sits in front of the starfield: a sun with a soft corona, faint orbit rings and six planets on tilted orbits, inner ones moving faster. It is placed and scaled as a fraction of what is visible at its depth, so it lands in the empty upper-right of the hero on a laptop and stays on screen on a phone, instead of being pinned to one world position that is only right at one window size.
+- The sky is a scrim, not a lid. The gradient over the starfield tops out well short of opaque, so stars carry to the bottom edge of the viewport while body text still has a dark ground. Reaching full `--bg` buried the field below the fold and made it look half a screen tall.
+- In Daylight the scene is effectively invisible — white stars and an additive corona have nothing to read against on a light background. That is consistent with the theme's name, not an oversight.
 - The starfield drifts slowly and leans toward the pointer. Under `prefers-reduced-motion`, and while physics is running, it stops rendering altogether rather than merely holding still — a frozen scene redrawn sixty times a second costs the same as a moving one. It drops star count on coarse pointers.
 - Sections reveal once on scroll, with a short ease-out on opacity and transform. Nothing loops or idles for attention.
 - Physics tuning (gravity, restitution, friction, density, throw clamp, shake) lives in one place: `src/modules/physics/lib/feel.ts`. Structural and camera numbers — wall thickness, zoom limits, grid step, fly duration — are in `src/modules/physics/constants.ts`, which `feel.ts` composes from.
@@ -46,7 +49,7 @@ A moving body cannot afford that blur — a backdrop filter on something that ge
 
 - One page, one column, max width `6xl`, with a fixed nav at the top and a floating control bar at the bottom.
 - The hero fills the viewport. Work alternates two wide featured cards with a two-column grid. About is a two-column split. Contact leads with a large statement.
-- Every project card carries a real image, a year, a role, a headline metric and its stack.
+- Every project card carries an image, the industry it is in (not a year), a role, a headline metric and its stack. A project with no public URL is a plain card with no link — a login wall or a staging host is not a portfolio link.
 
 ## Physics mode
 

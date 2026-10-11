@@ -26,7 +26,6 @@ import { screenToShared } from "./coords";
 
 const EMPTY: PresenceState = {
   connected: false,
-  selfId: null,
   name: "",
   colour: PEER_COLOURS[0],
   peers: [],
@@ -35,15 +34,12 @@ const EMPTY: PresenceState = {
 const listeners = new Set<() => void>();
 let state: PresenceState = EMPTY;
 /**
- * Live cursor positions, deliberately outside React. Each peer sends about
- * twenty a second; routing those through the store would re-render every
- * consumer at network rate, in the middle of the physics and WebGL loops.
- * The draw loop reads this map directly.
+ * Outside React on purpose: each peer sends ~20 updates a second, which would
+ * otherwise re-render every consumer mid-simulation. The draw loop reads it.
  */
 const cursors = new Map<string, Point>();
 let socket: WebSocket | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
-let pingTimer: ReturnType<typeof setInterval> | undefined;
 let reconnectDelay = RECONNECT_MIN_MS;
 let lastCursorAt = 0;
 let mode: PeerMode = "static";
@@ -72,11 +68,7 @@ function readName() {
   return randomName();
 }
 
-/**
- * Null means there is nowhere to connect, so presence stays off entirely.
- * In development the server runs beside the page, so the host is reused and
- * no configuration is needed.
- */
+/** Null means presence is off. Development reuses the page's own host. */
 function presenceUrl(): string | null {
   if (PRESENCE_URL) return PRESENCE_URL;
   if (process.env.NODE_ENV === "development") {
@@ -87,9 +79,8 @@ function presenceUrl(): string | null {
 }
 
 /* ---------- validation ----------
- * Everything below arrives from the socket. A frame of the wrong shape used to
- * reach the store and then throw during render, and the only error boundary on
- * the page wraps the starfield — so one bad frame unmounted the site.
+ * Everything here arrives from the socket. A bad frame reaching the store
+ * throws during render, and the only error boundary wraps the starfield.
  */
 
 const isPoint = (value: unknown): value is Point => {
@@ -104,11 +95,14 @@ function readWirePeer(value: unknown): WirePeer | null {
   if (!value || typeof value !== "object") return null;
   const { id, name, colour, cursor, mode: peerMode } = value as Record<string, unknown>;
   if (typeof id !== "string" || typeof name !== "string" || typeof colour !== "string") return null;
+  // Written into `style` on every viewer: `url(...)` and `var(...)` are legal
+  // background values, so anything but a plain hex is replaced.
+  const safeColour = /^#[0-9a-f]{6}$/i.test(colour) ? colour : PEER_COLOURS[0];
   if (!isCursor(cursor)) return null;
   return {
     id,
     name,
-    colour,
+    colour: safeColour,
     cursor,
     mode: peerMode === "physics" ? "physics" : "static",
   };
@@ -160,19 +154,26 @@ function handle(message: ServerMessage) {
     case "welcome":
       cursors.clear();
       for (const peer of message.peers) writeCursor(peer.id, peer.cursor);
-      setState({ selfId: message.you, peers: message.peers.map(toPeer) });
+      setState({ peers: message.peers.map(toPeer) });
       send({ type: "identify", name: state.name, colour: state.colour });
       send({ type: "mode", mode });
       break;
     case "peer": {
       writeCursor(message.peer.id, message.peer.cursor);
-      const rest = state.peers.filter((p) => p.id !== message.peer.id);
-      setState({ peers: [...rest, toPeer(message.peer)] });
+      // In place: `peer` is re-sent on every mode change, and appending
+      // reshuffled the avatar row each time.
+      const next = toPeer(message.peer);
+      const known = state.peers.some((p) => p.id === next.id);
+      setState({
+        peers: known
+          ? state.peers.map((p) => (p.id === next.id ? next : p))
+          : [...state.peers, next],
+      });
       break;
     }
     case "cursor": {
       writeCursor(message.id, message.cursor);
-      // Only the null/not-null flip is worth a render; the position is not.
+      // Only the null/not-null flip is worth a render.
       const had = state.peers.find((p) => p.id === message.id)?.hasCursor;
       const has = message.cursor !== null;
       if (had !== undefined && had !== has) {
@@ -218,7 +219,7 @@ function connect() {
     if (socket !== ws) return;
     socket = null;
     cursors.clear();
-    setState({ connected: false, selfId: null, peers: [] });
+    setState({ connected: false, peers: [] });
     scheduleReconnect();
   };
   ws.onclose = retry;
@@ -227,8 +228,6 @@ function connect() {
 
 function scheduleReconnect() {
   clearTimeout(reconnectTimer);
-  // The server is optional: without it the site simply has no presence, so
-  // back off rather than knocking on a closed port forever.
   reconnectTimer = setTimeout(connect, reconnectDelay);
   reconnectDelay = Math.min(reconnectDelay * 2, RECONNECT_MAX_MS);
 }
@@ -236,35 +235,18 @@ function scheduleReconnect() {
 /** Starts the connection once, on first mount. */
 export function startPresence() {
   if (started) return;
-  // Nowhere to connect: open no socket, schedule no retries, and leave the
-  // bar unrendered rather than reconnecting at a closed port forever.
+  // Nowhere to connect: no socket, no retries.
   if (!presenceUrl()) return;
   started = true;
   const name = readName();
   const colour = PEER_COLOURS[Math.floor(Math.random() * PEER_COLOURS.length)];
   setState({ name, colour });
   connect();
-  pingTimer = setInterval(() => send({ type: "ping" }), PING_MS);
+  // Runs for the life of the page, which is exactly as long as presence does.
+  setInterval(() => send({ type: "ping" }), PING_MS);
 }
 
-export function stopPresence() {
-  clearInterval(pingTimer);
-  clearTimeout(reconnectTimer);
-  socket?.close();
-  socket = null;
-  started = false;
-  reconnectDelay = RECONNECT_MIN_MS;
-  cursors.clear();
-  // Through setState, not by assignment: subscribers have to be told, or every
-  // consumer keeps rendering a connection that is gone.
-  setState(EMPTY);
-}
-
-/**
- * Throttled: the pointer fires far more often than anyone needs to see. Takes
- * raw client coordinates so the conversion happens after the throttle, not on
- * every `pointermove` of a high-polling-rate mouse.
- */
+/** Takes raw client coordinates so the conversion happens after the throttle. */
 export function sendCursor(clientX: number, clientY: number) {
   const now = performance.now();
   if (now - lastCursorAt < CURSOR_SEND_MS) return;

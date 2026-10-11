@@ -2,8 +2,17 @@ import { ICON_NAMES } from "@/modules/shared";
 import aboutJson from "./content/about.json";
 import contactJson from "./content/contact.json";
 import projectsJson from "./content/projects.json";
+import resumeJson from "./content/resume.json";
 import siteJson from "./content/site.json";
-import type { AboutContent, ContactContent, Project, SiteContent } from "./types";
+import stackJson from "./content/stack.json";
+import type {
+  AboutContent,
+  ContactContent,
+  Project,
+  ResumeContent,
+  SiteContent,
+  StackContent,
+} from "./types";
 
 /*
  * JSON imports widen string literals to `string`, so icon names need the
@@ -38,6 +47,8 @@ for (const [name, json] of Object.entries({
   projects: projectsJson,
   about: aboutJson,
   contact: contactJson,
+  stack: stackJson,
+  resume: resumeJson,
 })) {
   assertIconNames(json, name);
 }
@@ -46,3 +57,5 @@ export const site = siteJson as SiteContent;
 export const projects = projectsJson as Project[];
 export const about = aboutJson as AboutContent;
 export const contact = contactJson as ContactContent;
+export const stack = stackJson as StackContent;
+export const resume = resumeJson as ResumeContent;

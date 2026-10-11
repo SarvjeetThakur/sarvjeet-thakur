@@ -24,11 +24,8 @@ export function sharedToScreen(point: Point): Point {
 }
 
 /**
- * Brings a shared-space point into view, in whichever mode is running.
- *
- * `whenReady` covers the case where physics has just been switched on: the
- * engine is still being downloaded, so there is no camera yet and the scroll
- * branch below would be wrong — the document no longer scrolls.
+ * `whenReady` covers physics having just been switched on: the engine is still
+ * downloading, so there is no camera yet and the scroll branch would be wrong.
  */
 export function goToShared(point: Point, whenReady = false) {
   if (whenReady) {
@@ -41,8 +38,7 @@ export function goToShared(point: Point, whenReady = false) {
   }
   window.scrollTo({
     top: Math.max(0, point.y - window.innerHeight / 2),
-    // The CSS rule that disables smooth scrolling under reduced motion cannot
-    // reach an explicit `behavior`, so it is checked here too.
+    // The CSS reduced-motion rule cannot reach an explicit `behavior`.
     behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
   });
 }

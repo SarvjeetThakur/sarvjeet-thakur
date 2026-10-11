@@ -1,0 +1,63 @@
+{
+  "summary": "Full stack developer at CS Soft Solutions, where I started as a trainee in June 2022 and have been on the team since. I build web platforms for clients in fintech, health tech, AI SaaS, logistics and government, mostly React and Next.js on the front end, Node, NestJS and AWS behind it.",
+  "metaTitle": "Résumé — Sarvjeet Thakur, full stack developer",
+  "metaDescription": "The full résumé of Sarvjeet Thakur, full stack developer at CS Soft Solutions since 2022: experience, key projects and technical skills. Printable, with a PDF download.",
+  "backLabel": "Back to the portfolio",
+  "summaryHeading": "Summary",
+  "projectsHeading": "Key projects",
+  "skillsHeading": "Technical skills",
+  "viewLabel": "View résumé",
+  "viewHref": "/resume",
+  "downloadLabel": "Download PDF",
+  "pdf": "/sarvjeet-thakur-resume.pdf",
+  "experienceHeading": "Experience",
+  "experience": [
+    {
+      "role": "Full Stack Developer",
+      "company": "CS Soft Solutions",
+      "period": "December 2022 — present",
+      "location": "Mohali, India",
+      "bullets": [
+        "Build end-to-end web applications for clients across fintech, health tech, AI marketing and the public sector, from requirements through to production release.",
+        "Write component-driven front ends in React, Next.js, TypeScript and Redux Toolkit, with Tailwind and SCSS design systems that keep the UI consistent across products.",
+        "Develop REST APIs and services in Node.js, NestJS and Express against MySQL, PostgreSQL and MongoDB.",
+        "Implement serverless workflows on AWS Lambda and containerise services with Docker.",
+        "Engineer role-based access control, authentication and audit logging for consoles handling financial, clinical and government data.",
+        "Work in Agile sprints with distributed teams, reviewing code and writing the specifications that keep scope agreed."
+      ]
+    },
+    {
+      "role": "Trainee Developer",
+      "company": "CS Soft Solutions",
+      "period": "June 2022 — December 2022",
+      "location": "Mohali, India",
+      "bullets": [
+        "Six-month traineeship: learned the team's stack and review process, and shipped my first production features.",
+        "Moved onto client delivery work at the end of it and joined the team permanently."
+      ]
+    }
+  ],
+  "strengthsHeading": "How I work",
+  "strengths": [
+    {
+      "label": "Problem solving",
+      "icon": "gauge",
+      "text": "I chase a bug across the stack rather than patching the symptom I can see."
+    },
+    {
+      "label": "Technical communication",
+      "icon": "braces",
+      "text": "I translate between stakeholders and engineers, and write the decision down."
+    },
+    {
+      "label": "Client focus",
+      "icon": "rocket",
+      "text": "Most of my work is for international clients, delivered against their deadlines."
+    },
+    {
+      "label": "Code review",
+      "icon": "code",
+      "text": "I review carefully and expect the same, because it is cheaper than the alternative."
+    }
+  ]
+}

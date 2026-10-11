@@ -9,10 +9,15 @@ export function ContactSection() {
     <Section id="contact" index={index} heading={heading}>
       <div className="flex flex-col gap-10">
         <Reveal className="flex flex-col gap-5">
-          <p className="max-w-[20ch] font-display text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-6xl">
+          <p
+            {...physicsProps(BodyKind.Title)}
+            className="max-w-[20ch] font-display text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-6xl"
+          >
             {contact.lead}
           </p>
-          <p className="max-w-[52ch] text-pretty text-muted">{contact.body}</p>
+          <p {...physicsProps(BodyKind.Card)} className="max-w-[52ch] text-pretty text-muted">
+            {contact.body}
+          </p>
         </Reveal>
 
         <Reveal delay={0.08}>
@@ -39,11 +44,14 @@ export function ContactSection() {
         </Reveal>
 
         <Reveal delay={0.16}>
-          <ul className="grid gap-3 sm:grid-cols-3">
+          <ul role="list" className="grid gap-3 sm:grid-cols-3">
             {contact.links.map((link) => (
               <li key={link.href} className="flex">
                 <a
                   href={link.href}
+                  // The résumé entry is a file, not a profile: download it
+                  // rather than navigating away from the page.
+                  download={link.href.endsWith(".pdf") || undefined}
                   {...physicsProps(BodyKind.Chip)}
                   className="group flex min-h-11 flex-1 items-center gap-3 rounded-card border border-line bg-surface px-4 py-3.5 backdrop-blur-xl transition-colors hover:border-accent physics:bg-surface-solid physics:backdrop-blur-none"
                 >

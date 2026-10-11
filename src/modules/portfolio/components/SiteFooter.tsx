@@ -1,4 +1,4 @@
-import { BodyKind, physicsProps } from "@/modules/physics";
+import { BodyKind, physicsProps, regionProps } from "@/modules/physics";
 import { Icon } from "@/modules/shared";
 import { site } from "../content";
 
@@ -13,11 +13,13 @@ const YEAR = new Date().getFullYear();
 
 export function SiteFooter() {
   return (
-    <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-line py-10 text-sm text-muted">
+    <footer
+      {...regionProps("footer")}
+      className="flex flex-wrap items-center justify-between gap-4 border-t border-line py-10 text-sm text-muted"
+    >
       <p>
         {site.name} · {YEAR}
       </p>
-      <p className="hidden sm:block">{site.footer.note}</p>
       <a
         href="#top"
         // A body, so "back to top" is still reachable in physics mode.

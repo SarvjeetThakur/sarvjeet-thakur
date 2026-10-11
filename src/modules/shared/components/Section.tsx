@@ -18,7 +18,7 @@ export function Section({ id, index, heading, children }: SectionProps) {
       id={id}
       aria-labelledby={headingId}
       {...regionProps(id)}
-      className="scroll-mt-24 border-t border-line py-20 sm:py-28"
+      className="border-t border-line py-20 sm:py-28"
     >
       <Reveal className="mb-10 flex items-baseline gap-4 sm:mb-14">
         <span className="font-mono text-sm text-accent-2 tabular-nums">{index}</span>

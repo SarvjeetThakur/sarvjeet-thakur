@@ -41,21 +41,15 @@ import {
 import { FEEL } from "./feel";
 
 export type PhysicsController = {
-  /** Camera: pan by a screen-space delta. */
   pan: (dx: number, dy: number) => void;
-  /** Camera: zoom about a screen point by a multiplier. */
   zoomBy: (sx: number, sy: number, factor: number) => void;
-  /** Camera: zoom about a screen point to an absolute level. */
   zoomTo: (sx: number, sy: number, zoom: number) => void;
-  /** Keyboard equivalents of the pan and pinch gestures, about the viewport centre. */
+  /** Keyboard equivalents of pan and pinch, about the viewport centre. */
   stepZoom: (direction: 1 | -1) => void;
   stepPan: (direction: 1 | -1) => void;
   getZoom: () => number;
-  /** Current camera, so other modules can map world points to the screen. */
   getCamera: () => Camera;
-  /** Frame a single world point, keeping the current zoom. */
   flyToPoint: (x: number, y: number) => void;
-  /** Frame one region, or the whole world when the id is unknown. */
   flyTo: (regionId: string) => void;
   flyToOverview: () => void;
   /** Returns true when a body was grabbed, so the caller pans instead. */
@@ -98,19 +92,15 @@ function kindOf(el: HTMLElement): BodyKind {
 
 const clampThrow = (v: number) => Math.max(-FEEL.throwClamp, Math.min(FEEL.throwClamp, v));
 
-/** Checked per fly rather than once, so changing the OS setting takes effect. */
 const prefersReducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
  * Turns the laid-out page into an infinite canvas of rigid bodies.
  *
- * World coordinates are the document's own layout coordinates, so every body
- * starts exactly where it was rendered and nothing jumps when physics begins.
- * The camera is composed into each body's transform, so no wrapper element is
- * needed and React never re-renders during the simulation.
- *
- * Everything is measured once, at construction. A viewport resize therefore
- * rebuilds the whole controller rather than patching it; see `PhysicsStage`.
+ * World coordinates are the document's own layout coordinates, so nothing
+ * jumps when physics begins, and the camera is composed into each body's
+ * transform so React never re-renders during the simulation. Everything is
+ * measured once: a resize rebuilds the controller rather than patching it.
  */
 export function createPhysics(
   stage: HTMLElement,
@@ -151,9 +141,8 @@ export function createPhysics(
   );
   const tooBig = (box: Box) => box.w > MAX_BODY_SIZE || box.h > MAX_BODY_SIZE;
   const measured = candidates.filter(({ box }) => box.w > 0 && !tooBig(box));
-  // Skipped elements are not bodies, but `main` is hidden in physics mode, so
-  // they still have to opt back in or they would vanish instead of just being
-  // unthrowable.
+  // Not bodies, but still have to opt back in or they vanish rather than
+  // merely being unthrowable.
   const skipped = candidates.filter(({ box }) => box.w <= 0 || tooBig(box)).map(({ el }) => el);
   for (const el of skipped) el.style.visibility = "visible";
 
@@ -162,8 +151,7 @@ export function createPhysics(
   engine.gravity.y = FEEL.gravity;
 
   const half = WALL_THICKNESS / 2;
-  // The side walls are repositioned every camera change so they sit exactly on
-  // the screen edges: the play area is always the full width of the screen.
+  // Repositioned on every camera change so the play area is always screen-wide.
   const leftWall = Bodies.rectangle(-half, worldH / 2, WALL_THICKNESS, worldH * WALL_SPAN_FACTOR, {
     isStatic: true,
   });
@@ -200,7 +188,7 @@ export function createPhysics(
       chamfer: { radius: feel.chamfer },
     });
 
-    // Pin to the viewport; the transform carries both camera and body motion.
+    // The transform carries both camera and body motion.
     el.style.position = "fixed";
     el.style.top = "0";
     el.style.left = "0";
@@ -209,7 +197,6 @@ export function createPhysics(
     el.style.margin = "0";
     el.style.zIndex = "5";
     el.style.transformOrigin = "0 0";
-    // The page is hidden with `visibility: hidden` in physics mode; bodies opt back in.
     el.style.visibility = "visible";
 
     return { el, body, w: box.w, h: box.h, region: regionFor(box), home };
@@ -222,7 +209,7 @@ export function createPhysics(
 
   /* ---------- camera ---------- */
   const contentCentreX = worldW / 2;
-  // Start exactly where the reader was, so turning physics on does not teleport.
+  // Start where the reader was, so switching modes does not teleport.
   let cam: Camera = { x: centreX(1, vw, contentCentreX), y: -scrollY, zoom: 1 };
   let camDirty = true;
   let flyRaf = 0;
@@ -231,12 +218,10 @@ export function createPhysics(
   // can take the gestures, and a grid inside it would paint over them.
   const grid = document.querySelector<HTMLElement>(`[${GRID_ATTR}]`);
 
-  /** World-space x of the screen's left and right edges at the current zoom. */
   function screenBoundsX() {
     return { left: -cam.x / cam.zoom, right: (vw - cam.x) / cam.zoom };
   }
 
-  /** Keeps the side walls on the screen edges, whatever the zoom. */
   function placeWalls() {
     const { left, right } = screenBoundsX();
     Body.setPosition(leftWall, { x: left - half, y: leftWall.position.y });
@@ -259,8 +244,7 @@ export function createPhysics(
     cancelFly();
     const from = cam;
     const to = clampPan(fitBox(box, vw, vh, pad, contentCentreX), worldH, vh);
-    // Reduced motion: arrive rather than travel. The destination is the point,
-    // the 620ms glide is not.
+    // Reduced motion: arrive rather than travel.
     if (prefersReducedMotion()) {
       setCam(to);
       return;
@@ -294,7 +278,7 @@ export function createPhysics(
   /* ---------- painting ---------- */
   function paint(item: Item) {
     const { position, angle } = item.body;
-    // origin 0 0: camera, then world position, then rotate about the centre.
+    // origin 0 0: camera, world position, then rotate about the centre.
     item.el.style.transform =
       `translate(${cam.x.toFixed(2)}px,${cam.y.toFixed(2)}px) scale(${cam.zoom.toFixed(4)})` +
       ` translate(${position.x.toFixed(2)}px,${position.y.toFixed(2)}px)` +
@@ -303,13 +287,9 @@ export function createPhysics(
   }
 
   /*
-   * The dot pattern repeats every `step`, so translating the layer by the
-   * camera offset *modulo* step looks identical to moving `background-position`
-   * by the offset itself — but a transform composites instead of repainting a
-   * full-viewport gradient on every frame of every pan. `background-size` is
-   * the one property that must change, so it is written only when the zoom
-   * actually changed. The layer is a child of the stage and no ancestor of a
-   * body, so transforming it is safe.
+   * The pattern repeats every `step`, so translating by the offset *modulo*
+   * step looks identical to moving `background-position` — but composites
+   * instead of repainting a full-viewport gradient every frame.
    */
   let gridZoom = 0;
   function paintGrid() {
@@ -323,12 +303,8 @@ export function createPhysics(
     grid.style.transform = `translate(${wrap(cam.x)}px,${wrap(cam.y)}px)`;
   }
 
-  /**
-   * Walls alone are not enough: a crowded pile can squeeze a body through one.
-   * This is the guarantee that nothing is ever lost.
-   */
+  /** Walls alone leak: a crowded pile can squeeze a body through one. */
   function contain() {
-    // The camera cannot change mid-loop, so these are read once per frame.
     const { left, right } = screenBoundsX();
     const strip = right - left;
 
@@ -337,20 +313,16 @@ export function createPhysics(
       const halfH = item.h / 2;
       const { x, y } = item.body.position;
       const held = drag?.item === item;
-      // A carried body may roam the whole world; a resting one stays in its section.
+      // Carried bodies roam the world; resting ones stay in their section.
       const floorY = held
         ? worldH - FLOOR_INSET
         : item.region.box.y + item.region.box.h - FLOOR_INSET;
       const ceilY = held ? -REGION_HEADROOM : item.region.box.y - REGION_HEADROOM;
 
       /*
-       * Horizontal bounds are the screen edges, so a body can always use the
-       * full width of the screen but never leave it. Zoomed in far enough the
-       * visible strip is narrower than the body itself, and clamping both
-       * edges then has only one solution: every body pinned to the same x,
-       * every frame, with its horizontal velocity zeroed. Leave x alone in
-       * that case — the body is wider than the screen, so it is on screen
-       * whatever its position.
+       * Once the visible strip is narrower than the body, clamping both edges
+       * has a single solution — every body pinned to the same x, every frame.
+       * Leave x alone there: a body wider than the screen is on screen anyway.
        */
       const clampX = strip >= item.w;
       const nx = clampX
@@ -374,23 +346,20 @@ export function createPhysics(
   let debt = 0;
 
   function frame(now: number) {
-    // Fixed steps from real elapsed time: the world must advance at the same
-    // rate on a 120Hz phone as on a 60Hz laptop.
+    // Fixed steps from real elapsed time, so 120Hz does not run the world fast.
     debt += Math.min(now - lastAt, MAX_FRAME_MS);
     lastAt = now;
 
     let steps = 0;
     while (debt >= STEP_MS && steps < MAX_STEPS_PER_FRAME) {
       if (drag) {
-        // Carry the throw velocity into the step so collisions still respond.
         Sleeping.set(drag.item.body, false);
         Body.setVelocity(drag.item.body, drag.velocity);
       }
       Engine.update(engine, STEP_MS);
       if (drag) {
-        // Then snap back under the pointer. Integrating the throw velocity
-        // would otherwise run the body ahead of the hand. setPosition keeps
-        // the velocity, so releasing still throws.
+        // Snap back under the pointer; setPosition keeps the velocity, so a
+        // release still throws.
         Body.setPosition(drag.item.body, drag.target);
         drag.velocity = {
           x: drag.velocity.x * FEEL.holdDecay,
@@ -400,7 +369,6 @@ export function createPhysics(
       debt -= STEP_MS;
       steps += 1;
     }
-    // Do not try to catch up after a stall; drop the backlog instead.
     if (steps === MAX_STEPS_PER_FRAME) debt = 0;
 
     contain();
@@ -408,14 +376,13 @@ export function createPhysics(
     if (camDirty) paintGrid();
     let awake = drag !== null || flyRaf !== 0;
     for (const item of items) {
-      // A camera move repaints everything, settled or not.
       if (item.body.isSleeping && !camDirty) continue;
       paint(item);
       if (!item.body.isSleeping) awake = true;
     }
     camDirty = false;
 
-    // Stop once everything has settled, so an idle canvas costs nothing.
+    // Stop once settled, so an idle canvas costs nothing.
     if (awake) raf = requestAnimationFrame(frame);
     else running = false;
   }
@@ -423,18 +390,14 @@ export function createPhysics(
   function wake() {
     if (running) return;
     running = true;
-    // Reset the clock: time spent asleep is not time the world should advance.
+    // Time spent asleep is not time the world should advance.
     lastAt = performance.now();
     debt = 0;
     raf = requestAnimationFrame(frame);
   }
 
-  /*
-   * A body is `position: fixed` wherever the simulation put it, and the
-   * document cannot scroll, so the browser cannot bring a focused link into
-   * view. Without this, tabbing through physics mode strands focus somewhere
-   * off screen.
-   */
+  // Fixed bodies plus a locked document: the browser cannot scroll a focused
+  // link into view, so the camera has to.
   function onFocusIn(event: FocusEvent) {
     const target = event.currentTarget;
     const item = items.find((candidate) => candidate.el === target);
@@ -444,6 +407,7 @@ export function createPhysics(
   }
   for (const item of items) item.el.addEventListener("focusin", onFocusIn);
 
+  placeWalls();
   paintGrid();
   for (const item of items) paint(item);
   wake();
@@ -488,12 +452,10 @@ export function createPhysics(
       cancelFly();
       const point = screenToWorld(sx, sy, cam);
       const hits = Query.point(bodies, point);
-      // Bodies paint in DOM order, so the last match is the one on top: that
-      // is the one the pointer visually landed on.
+      // Bodies paint in DOM order, so the last match is the one on top.
       const hit = hits.at(-1);
       const item = hit && items.find((candidate) => candidate.body === hit);
       if (!hit || !item) return false;
-      // Drop the floor bit so a held body can be carried across sections.
       hit.collisionFilter.mask = CATEGORY_ALL & ~CATEGORY_FLOOR;
       drag = {
         item,
@@ -511,12 +473,10 @@ export function createPhysics(
       const point = screenToWorld(sx, sy, cam);
       const { body } = drag.item;
       const target = { x: point.x - drag.offset.x, y: point.y - drag.offset.y };
-      // Velocity set during the drag persists on release: that is the throw.
       const velocity = {
         x: clampThrow(target.x - body.position.x),
         y: clampThrow(target.y - body.position.y),
       };
-      // Measured on screen, so a flick at low zoom is not counted as a throw.
       drag.moved += (Math.abs(velocity.x) + Math.abs(velocity.y)) * cam.zoom;
       drag.target = target;
       drag.velocity = velocity;
@@ -528,7 +488,6 @@ export function createPhysics(
       const isTap = drag.moved < TAP_MAX_MOVE && performance.now() - drag.startedAt < TAP_MAX_MS;
       const { item } = drag;
       item.body.collisionFilter.mask = CATEGORY_ALL;
-      // It now belongs to whichever section it was dropped into.
       item.region = regionAtY(item.body.position.y);
       drag = null;
       wake();

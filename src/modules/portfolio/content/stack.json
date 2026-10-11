@@ -1,0 +1,172 @@
+{
+  "lead": "What I build production web applications with, mostly React and Next.js on the front end with Node on the back.",
+  "groups": [
+    {
+      "label": "Front end",
+      "technologies": true,
+      "icon": "layers",
+      "items": [
+        {
+          "label": "React",
+          "icon": "react"
+        },
+        {
+          "label": "Next.js",
+          "icon": "nextjs"
+        },
+        {
+          "label": "TypeScript",
+          "icon": "typescript"
+        },
+        {
+          "label": "JavaScript (ES6+)",
+          "icon": "javascript"
+        },
+        {
+          "label": "Redux Toolkit",
+          "icon": "redux"
+        },
+        {
+          "label": "Zustand",
+          "icon": "boxes"
+        },
+        {
+          "label": "Tailwind CSS",
+          "icon": "tailwind"
+        },
+        {
+          "label": "SCSS",
+          "icon": "sass"
+        },
+        {
+          "label": "Bootstrap",
+          "icon": "bootstrap"
+        },
+        {
+          "label": "HTML5",
+          "icon": "html5"
+        },
+        {
+          "label": "CSS3",
+          "icon": "css"
+        },
+        {
+          "label": "Apryse WebViewer",
+          "icon": "fileText"
+        }
+      ]
+    },
+    {
+      "label": "Back end",
+      "technologies": true,
+      "icon": "server",
+      "items": [
+        {
+          "label": "Node.js",
+          "icon": "nodejs"
+        },
+        {
+          "label": "NestJS",
+          "icon": "nestjs"
+        },
+        {
+          "label": "Express",
+          "icon": "express"
+        },
+        {
+          "label": "REST APIs",
+          "icon": "code"
+        },
+        {
+          "label": "WebSockets",
+          "icon": "realtime"
+        },
+        {
+          "label": "Microservices",
+          "icon": "boxes"
+        }
+      ]
+    },
+    {
+      "label": "Databases",
+      "technologies": true,
+      "icon": "database",
+      "items": [
+        {
+          "label": "PostgreSQL",
+          "icon": "postgresql"
+        },
+        {
+          "label": "MySQL",
+          "icon": "mysql"
+        },
+        {
+          "label": "MongoDB",
+          "icon": "mongodb"
+        }
+      ]
+    },
+    {
+      "label": "Cloud and DevOps",
+      "technologies": true,
+      "icon": "cloud",
+      "items": [
+        {
+          "label": "AWS",
+          "icon": "cloud"
+        },
+        {
+          "label": "AWS Lambda",
+          "icon": "cloud"
+        },
+        {
+          "label": "Docker",
+          "icon": "docker"
+        },
+        {
+          "label": "CI/CD",
+          "icon": "rocket"
+        }
+      ]
+    },
+    {
+      "label": "Tools and practice",
+      "technologies": false,
+      "icon": "git",
+      "items": [
+        {
+          "label": "Git",
+          "icon": "git"
+        },
+        {
+          "label": "GitHub",
+          "icon": "github"
+        },
+        {
+          "label": "Bitbucket",
+          "icon": "bitbucket"
+        },
+        {
+          "label": "Jira",
+          "icon": "jira"
+        },
+        {
+          "label": "Agile / Scrum",
+          "icon": "orbit"
+        },
+        {
+          "label": "Code review",
+          "icon": "gauge"
+        },
+        {
+          "label": "Cursor",
+          "icon": "cursor"
+        },
+        {
+          "label": "Claude Code",
+          "icon": "claude"
+        }
+      ]
+    }
+  ]
+}

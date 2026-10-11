@@ -41,7 +41,9 @@ This file is the single source of rules for every agent. `CLAUDE.md` only import
 - Never pass `--no-verify` and never unset `core.hooksPath` to get a commit through. A failing hook is a bug to fix, not a gate to route around.
 - `.github/workflows/ci.yml` runs the same gates on every push and pull request, and is the only place `pnpm build` runs automatically. It is the backstop for a push that skipped the hooks, not a substitute for running them.
 - Hooks are plain shell in `.husky/`: one command per line, no shebang and no `husky.sh` sourcing (both removed in husky 9). A new gate is a new line there, not a wrapper script.
-- There is no test suite and no `test` script. Browser verification is the only test, so `verification-loop`'s test-and-coverage phase is N/A here — report it as such rather than inventing a result. The `e2e-testing` skill is listed for when Playwright is added, not for something that exists.
+- `pnpm e2e` (`scripts/e2e.mjs`) asserts routes, server-rendered content, the URLs deliberately kept off this site, SEO, JSON-LD and the asset pipeline over HTTP. Run it against a **production** server, not `next dev`: `pnpm build && pnpm start`, then `pnpm e2e http://localhost:3000`. It is not wired into CI because it needs a running server.
+- `scripts/e2e-browser.js` is the other half — overflow, tap targets, image upscaling, heading order, list semantics and focus visibility — and needs a real layout. Run it through the `agent-browser` skill: `agent-browser open <url>` then `agent-browser eval "$(cat scripts/e2e-browser.js)"`. Check desktop and phone widths.
+- There is still no unit-test suite, so `verification-loop`'s coverage phase is N/A — say so rather than inventing a result.
 - `pnpm lint` is `oxlint --max-warnings 0`, so a warning fails the gate, not just an error. The `correctness` category is on, and `no-restricted-imports` enforces the module-boundary rule above — a cross-module deep import fails the build, it is not a review comment. Lint still cannot see most accessibility problems: only six `jsx-a11y` rules exist and none of them covers keyboard paths, focus order or contrast. Use the `a11y-reviewer` agent for that, not `pnpm lint`.
 
 ## Line endings
@@ -65,7 +67,9 @@ This file is the single source of rules for every agent. `CLAUDE.md` only import
 - Anything a crawler needs must be in the server HTML. Verify with `curl -s localhost:3000`, not the devtools inspector. Physics mode's `visibility: hidden` on `main` must be applied at runtime and never ship in the server response.
 - `src/app/robots.ts`, `src/app/sitemap.ts`, `opengraph-image.tsx` and `apple-icon.tsx` exist and all read `SITE_URL` from `@/modules/portfolio`. That resolves `NEXT_PUBLIC_SITE_URL`, which **must** be set in the deploy environment: unset, every canonical and absolute URL points at localhost.
 - Structured data is one `Person` graph with the projects as `CreativeWork`, built in `portfolio/lib/structured-data.ts`. It is injected inline, so the `<` escaping in that file is load-bearing — a `</script>` inside any content string would close the tag early.
-- The checked-in content is a placeholder: `Your Name`, `example.com` links, stock images. Say so rather than treating the site as launch-ready.
+- `public/sarvjeet-thakur-resume.pdf` is **generated**, not hand-made: it is `/resume` printed to PDF, so it carries the same content as the page and none of the client URLs kept off this site. Regenerate it after changing `resume.json`, `projects.json`, `stack.json` or `about.json`, or the download drifts from the page: with the dev server up, `agent-browser open http://localhost:3000/resume` then `agent-browser pdf public/sarvjeet-thakur-resume.pdf`.
+- Anything in `public/` is served to the whole internet whether the repo is private or not. A file is not protected by repo visibility — check what is inside it before adding it.
+- Tenure is derived, never typed: `career.startDate` in `site.json` is the only place a start date lives, the hero stat renders `{years}` from `yearsSince()` at build time, and the prose says "since 2022" so it cannot go stale. Do not reintroduce a hardcoded year count — it was previously written out in four separate files.
 
 ## Environment
 

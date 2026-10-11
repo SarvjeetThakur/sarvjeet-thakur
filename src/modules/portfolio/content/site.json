@@ -1,17 +1,25 @@
 {
   "name": "Sarvjeet Thakur",
   "initials": "ST",
-  "role": "Product engineer",
+  "role": "Full stack developer",
   "language": "en",
+  "career": {
+    "startDate": "2022-06-01"
+  },
+  "location": {
+    "locality": "Mohali",
+    "region": "Punjab",
+    "country": "IN"
+  },
   "meta": {
-    "title": "Sarvjeet Thakur — Product engineer",
-    "description": "Product engineer building interfaces with weight and consequence. Selected work, background and contact.",
-    "ogAlt": "Sarvjeet Thakur — Product engineer"
+    "title": "Sarvjeet Thakur — Full stack developer",
+    "description": "Full stack developer in Mohali building web platforms across fintech, health tech, AI SaaS, logistics and government — React, Next.js, Node and AWS.",
+    "ogAlt": "Sarvjeet Thakur — Full stack developer"
   },
   "hero": {
-    "greeting": "Available for work",
-    "headline": ["Interfaces", "with weight", "and consequence."],
-    "intro": "I am a product engineer. I build the parts of software people touch: fast, considered, and solid under the hand.",
+    "greeting": "Open to new work",
+    "headline": ["Platforms", "people have to", "trust."],
+    "intro": "I am a full stack developer in Mohali. Since 2022 I have built the web applications behind money moving, patient records and government grant programmes — React and Next.js on the front, Node and AWS behind it.",
     "actions": [
       {
         "label": "See the work",
@@ -26,18 +34,19 @@
         "primary": false
       }
     ],
+    "physicsNote": "This page has a second life: hit Physics mode in the bar below and everything here becomes something you can drag and throw.",
     "stats": [
       {
-        "value": "8 yrs",
-        "label": "Building for the web"
+        "value": "{years} yrs",
+        "label": "At CS Soft Solutions"
       },
       {
-        "value": "30+",
-        "label": "Products shipped"
+        "value": "8",
+        "label": "Products contributed to"
       },
       {
-        "value": "4",
-        "label": "Teams led"
+        "value": "5",
+        "label": "Industries"
       }
     ],
     "scrollHint": "Scroll"
@@ -50,8 +59,17 @@
         "label": "Work"
       },
       {
+        "id": "stack",
+        "label": "Stack"
+      },
+      {
         "id": "about",
         "label": "About"
+      },
+      {
+        "id": "resume",
+        "label": "Résumé",
+        "minor": true
       },
       {
         "id": "contact",
@@ -66,12 +84,20 @@
       "index": "01",
       "heading": "Selected work"
     },
-    "about": {
+    "stack": {
       "index": "02",
+      "heading": "Stack"
+    },
+    "about": {
+      "index": "03",
       "heading": "About"
     },
+    "resume": {
+      "index": "04",
+      "heading": "Résumé"
+    },
     "contact": {
-      "index": "03",
+      "index": "05",
       "heading": "Contact"
     }
   },
@@ -96,7 +122,6 @@
     "dark": "Dark"
   },
   "footer": {
-    "note": "Built with Next.js, three.js and matter-js.",
     "backToTop": "Back to top"
   },
   "presence": {

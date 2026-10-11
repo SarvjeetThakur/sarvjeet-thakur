@@ -11,6 +11,7 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "typecheck": "next typegen && tsc --noEmit",
+    "e2e": "node scripts/e2e.mjs",
     "dev:ws": "node server/presence.mjs",
     "dev:next": "next dev",
     "prepare": "husky"

@@ -42,7 +42,6 @@ export type ServerMessage =
 
 export type PresenceState = {
   connected: boolean;
-  selfId: string | null;
   name: string;
   colour: string;
   peers: Peer[];

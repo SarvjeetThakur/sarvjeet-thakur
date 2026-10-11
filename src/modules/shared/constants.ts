@@ -2,35 +2,59 @@
 export const REVEAL_ROOT_MARGIN = "0px 0px -8% 0px";
 
 /**
- * Every icon name usable from content JSON.
- *
- * The list lives here rather than beside the glyph map so that validating a
- * content file does not pull lucide and simple-icons in with it. `Icon` checks
- * its map against this list with `satisfies`, so the two cannot drift.
+ * Separate from the glyph map so validating content does not pull lucide and
+ * simple-icons in with it.
  */
 export const ICON_NAMES = [
   "accessibility",
   "arrowRight",
   "arrowUpRight",
   "atSign",
+  "bitbucket",
+  "bootstrap",
   "boxes",
   "braces",
+  "briefcase",
   "cloud",
+  "claude",
   "code",
+  "css",
+  "cursor",
   "database",
+  "docker",
+  "download",
+  "express",
   "figma",
+  "fileText",
   "gauge",
+  "git",
   "github",
+  "html5",
+  "javascript",
+  "jira",
   "layers",
   "linkedin",
   "mail",
+  "mongodb",
+  "mysql",
+  "nestjs",
+  "nextjs",
+  "nodejs",
   "orbit",
   "palette",
+  "php",
   "pointer",
+  "postgresql",
+  "react",
+  "realtime",
+  "redux",
   "rocket",
+  "sass",
   "server",
   "sparkles",
+  "tailwind",
   "testTube",
+  "typescript",
   "x",
 ] as const;
 

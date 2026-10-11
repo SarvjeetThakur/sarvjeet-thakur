@@ -8,10 +8,8 @@ import { clearCursor, getPeerCursor, sendCursor, usePresence } from "../lib/pres
 import type { Peer } from "../types";
 
 /**
- * A cursor is drawn at the peer's eased screen position, updated per frame.
  * `name` and `colour` are tracked so the label is only rewritten when it
- * actually changes: assigning `textContent` replaces the text node, which at
- * 60fps invalidates a label that has not moved.
+ * changes: assigning `textContent` replaces the text node every frame.
  */
 type Rendered = {
   el: HTMLDivElement;
@@ -32,15 +30,12 @@ export function Cursors() {
   }, [peers]);
   // Remote cursors must follow this viewer's camera, which React never sees.
   const physics = usePhysicsMode();
-  // There is nothing to draw until someone else is here, and the overwhelmingly
-  // common case is nobody: without this the loop would run 60 times a second
-  // for the life of every single-visitor page.
+  // Nothing to draw until someone else is here, which is the common case.
   const anyone = connected && peers.length > 0;
 
   // Broadcast this pointer in shared coordinates.
   useEffect(() => {
     if (!connected) return;
-    // Raw client coordinates: the conversion happens after the throttle.
     const onMove = (event: PointerEvent) => sendCursor(event.clientX, event.clientY);
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerleave", clearCursor);
@@ -87,8 +82,6 @@ export function Cursors() {
           entry.colour = peer.colour;
           entry.el.style.color = peer.colour;
           entry.label.style.background = peer.colour;
-          // White fails on the lighter peer colours, so the foreground is
-          // chosen from the colour's luminance.
           entry.label.style.color = peerTextColour(peer.colour);
         }
         if (entry.name !== peer.name) {
@@ -102,8 +95,7 @@ export function Cursors() {
         } else {
           const dx = target.x - entry.at.x;
           const dy = target.y - entry.at.y;
-          // Mutated in place: a fresh object literal per peer per frame is
-          // garbage the draw loop does not need to make.
+          // Mutated in place: no per-peer, per-frame allocation.
           if (Math.abs(dx) < CURSOR_SNAP && Math.abs(dy) < CURSOR_SNAP) {
             entry.at.x = target.x;
             entry.at.y = target.y;

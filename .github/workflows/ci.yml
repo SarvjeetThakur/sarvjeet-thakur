@@ -36,7 +36,7 @@ jobs:
 
       - run: pnpm build
         env:
-          # Only needs to be a valid absolute URL here: without it the build
-          # falls back to localhost, which is fine for a check but would be
-          # wrong for a deploy.
-          NEXT_PUBLIC_SITE_URL: https://example.invalid
+          # Baked in at build time, so CI builds what production builds.
+          # This does NOT configure the deployed site: Vercel runs its own
+          # build and reads its own environment.
+          NEXT_PUBLIC_SITE_URL: https://sarvjeet-thakur.vercel.app

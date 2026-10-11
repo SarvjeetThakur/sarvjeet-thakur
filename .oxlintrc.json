@@ -102,6 +102,14 @@
     // imports match.
     "no-restricted-imports": ["error", { "patterns": ["@/modules/*/**"] }],
 
+    // Off deliberately. The rule is right in the abstract — a `ul` has an
+    // implicit `list` role — but Tailwind's preflight sets `list-style: none`
+    // on every list, and Safari then drops that role, so VoiceOver stops
+    // announcing "list, 6 items" and any `aria-labelledby` on the list is
+    // lost with it. The explicit role is the documented workaround, and this
+    // site's résumé structure is carried almost entirely by lists.
+    "jsx-a11y/no-redundant-roles": "off",
+
     "jsx-a11y/alt-text": ["warn", { "elements": ["img"], "img": ["Image"] }],
     "jsx-a11y/aria-props": "warn",
     "jsx-a11y/aria-proptypes": "warn",

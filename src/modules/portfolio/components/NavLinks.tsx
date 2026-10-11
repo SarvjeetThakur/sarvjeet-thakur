@@ -20,13 +20,20 @@ export function NavLinks({ label, links }: { label: string; links: NavLink[] }) 
 
   return (
     <nav aria-label={label}>
-      <ul className="flex items-center gap-0.5 rounded-chip border border-line bg-surface p-1 backdrop-blur-xl">
+      <ul
+        role="list"
+        className="flex items-center gap-0.5 rounded-chip border border-line bg-surface p-1 backdrop-blur-xl"
+      >
         {links.map((link) => (
           <li key={link.id}>
             <a
               href={`#${link.id}`}
               onClick={(event) => onClick(event, link.id)}
-              className="flex min-h-11 items-center rounded-chip px-3 text-sm text-muted transition-colors hover:bg-surface-strong hover:text-fg"
+              className={`min-h-11 items-center rounded-chip px-3 text-sm text-muted transition-colors hover:bg-surface-strong hover:text-fg ${
+                // Five pills overflow a 390px screen; the minor one is still
+                // reachable by scrolling to its section.
+                link.minor ? "hidden sm:flex" : "flex"
+              }`}
             >
               {link.label}
             </a>

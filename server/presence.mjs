@@ -1,29 +1,21 @@
 /**
- * Presence server: live cursors, in memory, no accounts.
- *
- * One room for the whole site. Everything a peer sends is relayed to the
- * others and forgotten when they disconnect, so there is nothing to persist
- * and nothing to clean up.
+ * Presence server: live cursors, one room, in memory, no accounts.
  *
  *   node server/presence.mjs        # or: pnpm dev:ws
  *
- * Everything arriving on a socket is untrusted and is relayed to every other
- * viewer, so each field is validated against a fixed shape before it is
- * stored — never merely length-capped.
+ * Everything arriving on a socket is relayed to every other viewer, so each
+ * field is validated against a fixed shape, never merely length-capped.
  */
 import { randomUUID } from "node:crypto";
 import { WebSocketServer } from "ws";
 
-/** Shared with the client as NEXT_PUBLIC_PRESENCE_PORT so both agree on one value. */
+/** Shared with the client, so both agree on one value. */
 const PORT = Number(process.env.NEXT_PUBLIC_PRESENCE_PORT ?? 3001);
-/** Terminate a socket that has not answered a protocol ping by the next sweep. */
 const HEARTBEAT_MS = 15_000;
-/** A cursor outside this range is a bug or an attack, not a document position. */
 const MAX_COORDINATE = 1e7;
 const MAX_NAME_LENGTH = 24;
-/** One room, one machine: a cap so a loop cannot exhaust the process. */
 const MAX_PEERS = 64;
-/** Stop writing to a peer that is not draining; cursor frames keep arriving. */
+/** Stop writing to a peer that is not draining. */
 const MAX_BUFFERED_BYTES = 256 * 1024;
 const HEX_COLOUR = /^#[0-9a-f]{6}$/i;
 
@@ -50,12 +42,12 @@ const isLocalOrigin = (value) => {
 const wss = new WebSocketServer({
   port: PORT,
   host: "0.0.0.0",
-  // Cursor frames are tiny; ws would otherwise accept up to 100 MB.
+  // ws would otherwise accept up to 100 MB.
   maxPayload: 4096,
   /*
-   * The socket is bound to 0.0.0.0 so a phone on the LAN can join, and a
-   * WebSocket handshake is not subject to CORS — without this check, any page
-   * open in the developer's browser could connect and inject cursors.
+   * Bound to 0.0.0.0 so a phone on the LAN can join. A WebSocket handshake is
+   * not subject to CORS, so without this any page in the developer's browser
+   * could connect and inject cursors.
    */
   verifyClient: (/** @type {{ origin?: string }} */ { origin }) => isLocalOrigin(origin),
 });
@@ -90,9 +82,8 @@ const publicPeer = (peer) => ({
 });
 
 /**
- * Finite and inside the document's plausible range, or the cursor is dropped.
  * `typeof x === "number"` is not enough: JSON admits `1e999`, which parses to
- * Infinity and reaches every other viewer as an unusable transform.
+ * Infinity and reaches every viewer as an unusable transform.
  * @param {unknown} value @returns {value is number}
  */
 const isCoordinate = (value) =>
@@ -126,14 +117,11 @@ wss.on("connection", (socket, request) => {
   };
   peers.set(socket, peer);
 
-  // Protocol-level liveness. An app-level ping cannot be used: browsers
-  // throttle timers in background tabs to about once a minute, so a
-  // backgrounded reader would be evicted and reconnect in a loop. The browser
-  // answers a protocol ping from inside its WebSocket stack regardless.
+  // Protocol-level: browsers throttle timers in background tabs to about
+  // once a minute, so an app-level ping would evict backgrounded readers.
   alive.add(socket);
   socket.on("pong", () => alive.add(socket));
 
-  // Tell the newcomer who it is and who is already here.
   send(socket, {
     type: "welcome",
     you: peer.id,
@@ -153,10 +141,13 @@ wss.on("connection", (socket, request) => {
     switch (message.type) {
       case "identify": {
         if (typeof message.name === "string") {
-          peer.name = message.name.slice(0, MAX_NAME_LENGTH).trim() || "Guest";
+          // \p{C} is control and format characters, which includes the bidi
+          // overrides one peer could use to spoof another's displayed name.
+          peer.name =
+            message.name.normalize("NFC").replace(/\p{C}/gu, "").trim().slice(0, MAX_NAME_LENGTH) ||
+            "Guest";
         }
-        // The colour is written straight into `style` on every other viewer,
-        // so only a plain hex value is relayed.
+        // Written straight into `style` on every other viewer.
         if (typeof message.colour === "string" && HEX_COLOUR.test(message.colour)) {
           peer.colour = message.colour;
         }
@@ -164,7 +155,6 @@ wss.on("connection", (socket, request) => {
         break;
       }
       case "cursor": {
-        // Document coordinates, so they map to any screen size or zoom.
         peer.cursor = readCursor(message.cursor);
         broadcast({ type: "cursor", id: peer.id, cursor: peer.cursor }, socket);
         break;
@@ -191,22 +181,17 @@ wss.on("connection", (socket, request) => {
   socket.on("error", drop);
 });
 
-/*
- * Without this, a port clash is an unhandled 'error' event, which throws and
- * kills the process — under `pnpm dev` that buries a Node stack trace in the
- * middle of the Next output. The site works fine without presence, so say so
- * and leave.
- */
+/* Without this a port clash is an unhandled 'error' event and kills the process. */
 wss.on("error", (/** @type {NodeJS.ErrnoException} */ error) => {
-  if (error.code === "EADDRINUSE") {
-    console.error(`presence: port ${PORT} is already in use; continuing without presence`);
-  } else {
-    console.error("presence: server error", error);
+  if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+    console.error(`presence: cannot bind port ${PORT} (${error.code})`);
+    process.exit(1);
   }
-  process.exit(0);
+  // Anything else — an accept failure such as EMFILE — is load, not a reason
+  // to take presence down for everyone.
+  console.error("presence: server error", error);
 });
 
-// Evict sockets whose connection died without a close frame.
 const sweep = setInterval(() => {
   for (const socket of peers.keys()) {
     if (!alive.has(socket)) {

@@ -8,7 +8,10 @@ export type Camera = { x: number; y: number; zoom: number };
 
 export type Box = { x: number; y: number; w: number; h: number };
 
-export const clampZoom = (zoom: number) => Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
+// Guarded: Math.min/max propagate NaN, and a NaN camera makes every body
+// transform invalid with no gesture able to recover it.
+export const clampZoom = (zoom: number) =>
+  Number.isFinite(zoom) ? Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom)) : ZOOM_MIN;
 
 /** The only place screen coordinates become world coordinates. */
 export function screenToWorld(sx: number, sy: number, cam: Camera) {

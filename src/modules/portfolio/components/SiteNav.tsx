@@ -1,4 +1,5 @@
-import { site } from "../content";
+import Image from "next/image";
+import { about, site } from "../content";
 import { NavLinks } from "./NavLinks";
 
 export function SiteNav() {
@@ -19,9 +20,24 @@ export function SiteNav() {
       <div className="relative mx-auto flex max-w-6xl items-center gap-3 px-5 py-4 sm:px-8">
         <a
           href="#top"
-          className="flex min-h-11 items-center gap-2.5 rounded-chip border border-line bg-surface px-3 backdrop-blur-xl"
+          aria-label={`${site.name} — ${site.role}`}
+          className="flex min-h-11 items-center gap-2.5 rounded-chip border border-line bg-surface py-1 pr-3 pl-1 backdrop-blur-xl"
         >
-          <span className="font-display text-sm font-bold tracking-tight">{site.initials}</span>
+          {about.portrait ? (
+            <Image
+              src={about.portrait.src}
+              alt=""
+              width={about.portrait.width}
+              height={about.portrait.height}
+              sizes="36px"
+              quality={100}
+              className="size-8 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <span className="grid size-8 place-items-center font-display text-sm font-bold tracking-tight">
+              {site.initials}
+            </span>
+          )}
           <span className="hidden text-sm text-muted sm:inline">{site.role}</span>
         </a>
         <div className="ml-auto">

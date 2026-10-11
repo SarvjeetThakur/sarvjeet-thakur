@@ -1,10 +1,7 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 
-/*
- * `physics:` styles apply only while physics mode is running.
- * Unprefixed classes are the normal, scrollable document.
- */
+/* `physics:` styles apply only while physics mode is running. */
 @custom-variant physics (&:where([data-physics-mode="on"] *));
 
 /* Physics turns the page into a playground, so the document must not scroll. */
@@ -13,9 +10,8 @@ html:has(body[data-physics-mode="on"]) {
 }
 
 /*
- * The page is a single column and never scrolls sideways. Physics bodies and
- * the WebGL canvas are sized at runtime and can briefly exceed the viewport,
- * which on mobile makes the browser widen the layout viewport for good.
+ * Bodies and the canvas are sized at runtime and can briefly exceed the
+ * viewport, which on mobile widens the layout viewport permanently.
  */
 html,
 body {
@@ -24,6 +20,13 @@ body {
 
 html {
   scroll-behavior: smooth;
+  /*
+   * Clears the fixed header and control bar, which otherwise hide a focused
+   * element entirely (WCAG 2.4.11). Honoured by focus scrolling as well as
+   * hash jumps, so sections must NOT also carry `scroll-mt-*` — they stack.
+   */
+  scroll-padding-top: 7rem;
+  scroll-padding-bottom: 8rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -40,4 +43,52 @@ html {
 :focus-visible {
   outline: 2px solid var(--accent-2);
   outline-offset: 3px;
+}
+
+/* Paper colours: the design is dark, and printing it would empty a cartridge. */
+/*
+ * Zero on purpose: headless Chrome ignores this and prints at its own
+ * margins, so the real page margin is body padding below. Zero stops the two
+ * stacking under Ctrl+P.
+ */
+@page {
+  margin: 0;
+}
+
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --bg-2: #ffffff;
+    --surface: transparent;
+    --surface-strong: transparent;
+    --surface-solid: #ffffff;
+    --fg: #14131c;
+    --muted: #33313f;
+    --line: #a9a7b4;
+    --line-strong: #9a97a8;
+    --accent: #3f31a8;
+    --accent-2: #0a5c78;
+    --accent-fg: #14131c;
+    --lift: none;
+    --glow: none;
+  }
+
+  /* Tailwind's scale is in rem, so this shrinks the whole document at once. */
+  html {
+    font-size: 12.5px;
+  }
+
+  /* The real page margin. See the @page note above. */
+  body {
+    background: #ffffff;
+    padding: 14mm 13mm;
+  }
+
+  [data-physics-grid],
+  canvas {
+    display: none !important;
+  }
 }

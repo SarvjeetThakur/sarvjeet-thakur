@@ -18,11 +18,9 @@ import { ThemeButton } from "@/modules/theme";
 import { site } from "../content";
 
 /*
- * Glyphs are imported straight from lucide rather than through `Icon`. `Icon`
- * holds one object literal referencing all 23 glyphs, so no bundler can drop
- * the 19 this bar does not use; importing the four directly keeps the map out
- * of the client bundle entirely. Next's default `optimizePackageImports`
- * already covers lucide-react.
+ * Glyphs come straight from lucide, not through `Icon`: its map is one object
+ * referencing every glyph, so none of them can be tree-shaken out of the
+ * client bundle.
  */
 type Glyph = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -34,7 +32,7 @@ const HINT_ID = "physics-hint";
 type BarButtonProps = {
   glyph: Glyph;
   label: string;
-  /** Filled treatment while the mode is on. Styling only; see the note below. */
+  /** Filled treatment while the mode is on. Styling only. */
   on?: boolean;
   /** Secondary action: drops to icon-only on narrow screens. */
   compact?: boolean;
@@ -57,7 +55,6 @@ function BarButton({ glyph: Glyph, label, on = false, compact = false, onClick }
   );
 }
 
-/** Icon-only, for the camera controls where the glyph is the whole label. */
 function IconButton({ glyph: Glyph, label, onClick }: Omit<BarButtonProps, "compact" | "on">) {
   return (
     <button
@@ -78,17 +75,14 @@ export function ControlBar() {
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex flex-col items-center gap-2 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
       <PresenceBar labels={site.presence} />
       {/*
-        Switching modes removes most of the page from the accessibility tree,
-        so it has to be announced. The region is always mounted: a live region
-        added to the DOM at the same moment as its text is not reliably read.
+        Always mounted: a live region added at the same moment as its text is
+        not reliably announced.
       */}
       <p aria-live="polite" className="sr-only">
         {physics ? site.physics.entered : site.physics.exited}
       </p>
       {physics ? (
-        // `output` carries an implicit role of status, so the instructions are
-        // read out when the mode changes. Wrapping rather than truncating, so
-        // they are legible on a phone instead of clipped to three words.
+        // `output` has an implicit role of status, so this is announced on change.
         <output
           id={HINT_ID}
           className="block max-w-prose rounded-card bg-fg/90 px-3 py-1.5 text-center text-xs font-medium text-pretty text-bg"
@@ -98,13 +92,8 @@ export function ControlBar() {
       ) : null}
       {/* wraps rather than scrolls, so every control stays reachable on a phone */}
       <div
-        // Not role="toolbar": that promises a roving tabindex and arrow-key
-        // navigation, and a role without its keyboard contract is worse than
-        // no role. Every button here is its own tab stop.
-        //
-        // The suggested tags (fieldset, details, hgroup...) are all wrong for
-        // a cluster of buttons; `group` plus a label is the correct ARIA here,
-        // and a bare div's aria-label would be ignored.
+        // Not role="toolbar": that promises roving tabindex and arrow keys,
+        // and a role without its keyboard contract is worse than none.
         // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
         role="group"
         aria-label={toolbarLabel}
@@ -122,11 +111,7 @@ export function ControlBar() {
             <BarButton glyph={Sparkles} label={shake} compact onClick={physicsActions.shake} />
             <BarButton glyph={Orbit} label={reset} compact onClick={physicsActions.reset} />
             <span aria-hidden className="mx-1 h-5 w-px flex-none bg-line" />
-            {/*
-              Pan and zoom are otherwise drag-and-pinch only, and physics mode
-              locks page scroll, so without these there is no keyboard or
-              single-pointer way to move the camera at all.
-            */}
+            {/* Without these the camera is drag-and-pinch only, and scroll is locked. */}
             <IconButton glyph={Plus} label={zoomIn} onClick={physicsActions.zoomIn} />
             <IconButton glyph={Minus} label={zoomOut} onClick={physicsActions.zoomOut} />
             <IconButton glyph={ChevronUp} label={panUp} onClick={physicsActions.panUp} />
@@ -134,11 +119,7 @@ export function ControlBar() {
             <span aria-hidden className="mx-1 h-5 w-px flex-none bg-line" />
           </>
         ) : null}
-        {/*
-          The label names what the press will do, so aria-pressed is left off:
-          "Exit physics, pressed" reads as though exiting had already happened.
-          Same convention as ThemeButton.
-        */}
+        {/* The label names what the press does, so aria-pressed would contradict it. */}
         <BarButton
           glyph={MousePointer2}
           label={physics ? exit : enter}

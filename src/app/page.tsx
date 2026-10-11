@@ -5,9 +5,11 @@ import {
   ContactSection,
   ControlBar,
   Hero,
+  ResumeSection,
   SiteFooter,
   site,
   SiteNav,
+  StackSection,
   structuredData,
   WorkSection,
 } from "@/modules/portfolio";
@@ -33,7 +35,9 @@ export default function Home() {
       >
         <Hero />
         <WorkSection />
+        <StackSection />
         <AboutSection />
+        <ResumeSection />
         <ContactSection />
         <SiteFooter />
       </main>
