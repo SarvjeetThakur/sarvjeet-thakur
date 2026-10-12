@@ -22,6 +22,15 @@ export const APPLE_ICON_SIZE = { width: 180, height: 180 };
 export const ICON_SIZES = [64, 192, 512] as const;
 
 /**
+ * How the portrait is cropped into an icon: enlarged by `zoom`, then centred
+ * on the face, given as a fraction of the photo's width and height. Retune
+ * these when the portrait file changes.
+ */
+export const ICON_PORTRAIT_CROP = { zoom: 2.2, faceX: 0.477, faceY: 0.3 };
+/** Fallback only: how much of the tile the initials fill without a portrait. */
+export const ICON_GLYPH_RATIO = 0.47;
+
+/**
  * Captures of the live site under /public, listed in the manifest. Regenerate
  * them with the Open Graph image after a visual change; see AGENTS.md.
  */

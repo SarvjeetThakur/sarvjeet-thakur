@@ -10,4 +10,5 @@ export { StackSection } from "./components/StackSection";
 export { WorkSection } from "./components/WorkSection";
 export { about, contact, projects, resume, site, stack } from "./content";
 export { APPLE_ICON_SIZE, ICON_SIZES, OG_IMAGE, SCREENSHOTS, SITE_URL } from "./constants";
+export { siteIcon } from "./lib/site-icon";
 export { structuredData } from "./lib/structured-data";
