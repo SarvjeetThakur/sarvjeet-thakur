@@ -6,6 +6,9 @@ import { PortraitReveal } from "./PortraitReveal";
 
 const { greeting, headline, intro, actions, physicsNote, stats } = site.hero;
 
+/** The hero stands the subject on the page; the framed photo is the fallback. */
+const portrait = about.portraitCutout ?? about.portrait;
+
 /* Module scope: resolved at build time. See `tenure.ts`. */
 const YEARS = String(yearsSince(site.career.startDate));
 
@@ -33,7 +36,7 @@ export function Hero() {
           {/* Name and role inside the h1: the poster line alone ranks for nothing. */}
           <h1 className="flex flex-col gap-5" {...physicsProps(BodyKind.Title)}>
             <span className="text-sm tracking-[0.18em] text-muted uppercase">
-              {site.name} · {site.role}
+              {site.name} · {site.role} · {site.location.locality}
             </span>
             <span className="font-display text-hero font-bold">
               {headline.map((line, i) => (
@@ -82,16 +85,13 @@ export function Hero() {
           </p>
         </div>
 
-        {about.portrait ? (
-          <figure
+        {portrait ? (
+          <div
             {...physicsProps(BodyKind.Card)}
-            className="flex w-full max-w-[20rem] flex-col gap-3 lg:justify-self-end"
+            className="mx-auto w-full max-w-[18rem] self-end sm:max-w-[20rem] lg:mx-0 lg:max-w-[22rem] lg:justify-self-end"
           >
-            <PortraitReveal image={about.portrait} />
-            <figcaption className="text-sm text-muted">
-              {site.location.locality}, {site.location.region}
-            </figcaption>
-          </figure>
+            <PortraitReveal image={portrait} />
+          </div>
         ) : null}
       </div>
 

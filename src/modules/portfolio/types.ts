@@ -111,6 +111,12 @@ export type AboutContent = {
   paragraphs: string[];
   /** Optional: the section reflows without it rather than leaving a hole. */
   portrait?: ContentImage;
+  /**
+   * The same photo with its background removed, for the hero, where the
+   * subject stands on the page itself rather than inside a card. Optional:
+   * without it the hero falls back to the framed `portrait`.
+   */
+  portraitCutout?: ContentImage;
   domainsHeading: string;
   domains: Domain[];
 };

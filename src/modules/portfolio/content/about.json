@@ -4,6 +4,12 @@
     "I am a full stack developer in Mohali, building web platforms for clients abroad since 2022. Most of that work has been React and Next.js on the front end with Node, NestJS and AWS behind it, and most of it has had real consequences attached: money moving, patient records, government grant money being approved.",
     "That mix is what I have come to like. A ward record system and a crypto marketplace want very different things from you, but both punish you the same way for a careless edge case. I would rather spend the extra day on the state nobody planned for than ship something that only works on the happy path."
   ],
+  "portraitCutout": {
+    "src": "/portrait-cutout.webp",
+    "alt": "Sarvjeet Thakur, head and shoulders, cut out from its background",
+    "width": 421,
+    "height": 517
+  },
   "portrait": {
     "src": "/portrait.jpg",
     "alt": "Sarvjeet Thakur, head and chest",
