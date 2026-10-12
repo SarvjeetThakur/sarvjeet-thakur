@@ -6,6 +6,7 @@ mode: an infinite canvas where the cards, chips and headings become rigid
 bodies you can pan, zoom, drag and throw. Both modes read the same content and
 the same DOM, and the page is fully readable with JavaScript disabled.
 
+
 Next.js (App Router), React, TypeScript, Tailwind, three.js, matter-js, pnpm.
 
 ## Running it
