@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { APPLE_ICON_SIZE, ICON_SIZE, site } from "@/modules/portfolio";
+import { APPLE_ICON_SIZE, ICON_SIZES, SCREENSHOTS, site } from "@/modules/portfolio";
 import { Theme, THEME_COLORS } from "@/modules/theme";
 
 /**
@@ -21,16 +21,22 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: THEME_COLORS[Theme.Dark],
     theme_color: THEME_COLORS[Theme.Dark],
     icons: [
-      {
-        src: "/icon",
-        sizes: `${ICON_SIZE.width}x${ICON_SIZE.height}`,
+      ...ICON_SIZES.map((px) => ({
+        src: `/icon/${px}`,
+        sizes: `${px}x${px}`,
         type: "image/png",
-      },
+      })),
       {
         src: "/apple-icon",
         sizes: `${APPLE_ICON_SIZE.width}x${APPLE_ICON_SIZE.height}`,
         type: "image/png",
       },
     ],
+    screenshots: SCREENSHOTS.map((shot) => ({
+      src: shot.src,
+      sizes: `${shot.width}x${shot.height}`,
+      type: "image/png",
+      form_factor: shot.formFactor,
+    })),
   };
 }

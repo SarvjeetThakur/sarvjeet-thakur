@@ -36,7 +36,6 @@ export type SiteContent = {
     /** One line telling a first-time reader physics mode exists. */
     physicsNote: string;
     stats: { value: string; label: string }[];
-    scrollHint: string;
   };
   nav: { label: string; links: NavLink[]; skip: string; mainLabel: string };
   sections: {

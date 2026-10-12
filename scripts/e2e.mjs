@@ -46,9 +46,12 @@ const run = async () => {
     ["/resume", "text/html"],
     ["/robots.txt", "text/plain"],
     ["/sitemap.xml", "application/xml"],
-    ["/icon", "image/png"],
+    ["/icon/64", "image/png"],
+    ["/icon/192", "image/png"],
+    ["/icon/512", "image/png"],
     ["/apple-icon", "image/png"],
-    ["/opengraph-image", "image/png"],
+    ["/screenshots/desktop.png", "image/png"],
+    ["/screenshots/mobile.png", "image/png"],
     ["/sarvjeet-thakur-resume.pdf", "application/pdf"],
     ["/portrait.jpg", "image/jpeg"],
   ]) {
@@ -124,6 +127,14 @@ const run = async () => {
   );
   check("resume title differs from home", og(h, "title") !== og(resume.body, "title"));
   check("og:image absolute", /^https?:\/\//.test(og(h, "image") ?? ""), og(h, "image"));
+  const ogImage = await fetch(`${BASE}${new URL(og(h, "image") ?? BASE).pathname}`);
+  check(
+    "og:image serves a PNG",
+    ogImage.status === 200 && (ogImage.headers.get("content-type") ?? "").includes("image/png"),
+    `${ogImage.status} ${ogImage.headers.get("content-type")}`,
+  );
+  check("og:image has alt text", Boolean(og(h, "image:alt")), og(h, "image:alt"));
+  check("resume has og:image", Boolean(og(resume.body, "image")), og(resume.body, "image"));
   const robots = await get("/robots.txt");
   check("robots has sitemap", robots.body.includes("Sitemap:"));
   check("robots has no Host directive", !robots.body.includes("Host:"));

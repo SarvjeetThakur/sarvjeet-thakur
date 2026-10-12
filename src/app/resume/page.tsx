@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   about,
   contact,
+  OG_IMAGE,
   projects,
   resume,
   site,
@@ -36,11 +37,13 @@ export const metadata: Metadata = {
     locale: site.language,
     title: resume.metaTitle,
     description: resume.metaDescription,
+    images: [{ ...OG_IMAGE, alt: site.meta.ogAlt }],
   },
   twitter: {
     card: "summary_large_image",
     title: resume.metaTitle,
     description: resume.metaDescription,
+    images: [{ ...OG_IMAGE, alt: site.meta.ogAlt }],
   },
 };
 

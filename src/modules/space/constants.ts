@@ -33,7 +33,7 @@ export const CONTEXT_RESTORE_MS = 3_000;
  */
 export const SOLAR_DEPTH = -34;
 export const SOLAR_X_FRACTION = 0.56;
-export const SOLAR_Y_FRACTION = 0.34;
+export const SOLAR_Y_FRACTION = 0.5;
 
 /** The view the orbit radii were chosen against; the group scales off it. */
 export const SOLAR_REFERENCE_HALF_WIDTH = 36;

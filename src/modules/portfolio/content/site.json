@@ -14,12 +14,12 @@
   "meta": {
     "title": "Sarvjeet Thakur — Full stack developer",
     "description": "Full stack developer in Mohali building web platforms across fintech, health tech, AI SaaS, logistics and government — React, Next.js, Node and AWS.",
-    "ogAlt": "Sarvjeet Thakur — Full stack developer"
+    "ogAlt": "Sarvjeet Thakur's portfolio home page: the headline “Platforms people have to trust.” beside his portrait, over a starfield"
   },
   "hero": {
     "greeting": "Open to new work",
     "headline": ["Platforms", "people have to", "trust."],
-    "intro": "I am a full stack developer in Mohali. Since 2022 I have built the web applications behind money moving, patient records and government grant programmes — React and Next.js on the front, Node and AWS behind it.",
+    "intro": "Since 2022 I have built the web platforms behind money moving, patient records and government grants: React and Next.js in front, Node and AWS behind.",
     "actions": [
       {
         "label": "See the work",
@@ -48,8 +48,7 @@
         "value": "5",
         "label": "Industries"
       }
-    ],
-    "scrollHint": "Scroll"
+    ]
   },
   "nav": {
     "label": "Sections",

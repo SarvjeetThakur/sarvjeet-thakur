@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
-import { site, SITE_URL } from "@/modules/portfolio";
+import { OG_IMAGE, site, SITE_URL } from "@/modules/portfolio";
 import { Theme, THEME_COLORS, ThemeProvider } from "@/modules/theme";
 import "./globals.css";
 
@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     title: site.meta.title,
     description: site.meta.description,
     locale: site.language,
+    images: [{ ...OG_IMAGE, alt: site.meta.ogAlt }],
   },
   twitter: {
     // A portfolio is distributed by being shared, so the card is a ranking
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: site.meta.title,
     description: site.meta.description,
+    images: [{ ...OG_IMAGE, alt: site.meta.ogAlt }],
   },
 };
 

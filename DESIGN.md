@@ -48,7 +48,7 @@ A moving body cannot afford that blur — a backdrop filter on something that ge
 ## Layout
 
 - One page, one column, max width `6xl`, with a fixed nav at the top and a floating control bar at the bottom.
-- The hero fills the viewport. Work alternates two wide featured cards with a two-column grid. About is a two-column split. Contact leads with a large statement.
+- The hero fills the viewport: a split, words on the left and a monochrome portrait on the right that shows its colour only in a soft circle around the pointer (and is simply in colour where there is no hover), bottom-aligned so the solar system keeps the upper right; a quiet stats row closes it. The hero headline uses `--text-hero`, a step below `--text-display`, so it fits beside the portrait. Work alternates two wide featured cards with a two-column grid. About is a two-column split of prose and domains. Contact leads with a large statement.
 - Every project card carries an image, the industry it is in (not a year), a role, a headline metric and its stack. A project with no public URL is a plain card with no link — a login wall or a staging host is not a portfolio link.
 
 ## Physics mode

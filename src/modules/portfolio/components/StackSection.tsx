@@ -39,7 +39,7 @@ export function StackSection() {
                       {...physicsProps(BodyKind.Chip)}
                       className="inline-flex items-center gap-2 rounded-chip border border-line bg-surface px-3 py-1.5 text-sm backdrop-blur-xl physics:bg-surface-solid physics:backdrop-blur-none"
                     >
-                      <Icon name={item.icon} className="size-3.5 text-muted" />
+                      <Icon name={item.icon} brand className="size-4" />
                       {item.label}
                     </li>
                   ))}

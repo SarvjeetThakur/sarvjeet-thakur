@@ -1,29 +1,50 @@
 import {
   SiBitbucket,
+  SiBitbucketHex,
   SiBootstrap,
+  SiBootstrapHex,
   SiClaude,
+  SiClaudeHex,
   SiCss,
+  SiCssHex,
   SiCursor,
   SiDocker,
+  SiDockerHex,
   SiExpress,
   SiFigma,
+  SiFigmaHex,
   SiGit,
+  SiGitHex,
   SiGithub,
   SiHtml5,
+  SiHtml5Hex,
   SiJavascript,
+  SiJavascriptHex,
   SiJira,
+  SiJiraHex,
   SiMongodb,
+  SiMongodbHex,
   SiMysql,
+  SiMysqlHex,
   SiNestjs,
+  SiNestjsHex,
   SiNextdotjs,
   SiNodedotjs,
+  SiNodedotjsHex,
   SiPhp,
+  SiPhpHex,
   SiPostgresql,
+  SiPostgresqlHex,
   SiReact,
+  SiReactHex,
   SiRedux,
+  SiReduxHex,
   SiSass,
+  SiSassHex,
   SiTailwindcss,
+  SiTailwindcssHex,
   SiTypescript,
+  SiTypescriptHex,
   SiX,
 } from "@icons-pack/react-simple-icons";
 import {
@@ -114,12 +135,46 @@ const ICONS = {
   x: SiX,
 } satisfies Record<IconName, Glyph>;
 
-type IconProps = { name: IconName; className?: string };
+/**
+ * Brand colours come from simple-icons, never typed here. Cursor, Express,
+ * GitHub, Next.js and X are left out on purpose: their brand colour is black,
+ * which vanishes on the dark theme, so they keep the text colour instead.
+ */
+const BRAND_COLORS: Partial<Record<IconName, string>> = {
+  bitbucket: SiBitbucketHex,
+  bootstrap: SiBootstrapHex,
+  claude: SiClaudeHex,
+  css: SiCssHex,
+  docker: SiDockerHex,
+  figma: SiFigmaHex,
+  git: SiGitHex,
+  html5: SiHtml5Hex,
+  javascript: SiJavascriptHex,
+  jira: SiJiraHex,
+  mongodb: SiMongodbHex,
+  mysql: SiMysqlHex,
+  nestjs: SiNestjsHex,
+  nodejs: SiNodedotjsHex,
+  php: SiPhpHex,
+  postgresql: SiPostgresqlHex,
+  react: SiReactHex,
+  redux: SiReduxHex,
+  sass: SiSassHex,
+  tailwind: SiTailwindcssHex,
+  typescript: SiTypescriptHex,
+};
 
-export function Icon({ name, className = "size-4" }: IconProps) {
+type IconProps = {
+  name: IconName;
+  className?: string;
+  /** Paint a brand mark in its own colour; other glyphs are unaffected. */
+  brand?: boolean;
+};
+
+export function Icon({ name, className = "size-4", brand = false }: IconProps) {
   const Glyph = ICONS[name];
   // Backstop only: `assertIconNames` in content.ts catches this at build time.
   // Rendering `undefined` would throw and take down the whole prerender.
   if (!Glyph) return null;
-  return <Glyph aria-hidden className={className} />;
+  return <Glyph aria-hidden className={className} color={brand ? BRAND_COLORS[name] : undefined} />;
 }

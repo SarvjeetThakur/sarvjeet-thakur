@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BodyKind, physicsProps } from "@/modules/physics";
 import { Icon, Reveal, Section } from "@/modules/shared";
 import { about, site } from "../content";
@@ -29,25 +28,7 @@ export function AboutSection() {
           ))}
         </Reveal>
 
-        <Reveal delay={0.1} className="flex flex-col gap-10">
-          {about.portrait ? (
-            <div
-              {...physicsProps(BodyKind.Card)}
-              className="overflow-hidden rounded-card border border-line bg-surface"
-            >
-              <Image
-                src={about.portrait.src}
-                alt={about.portrait.alt}
-                width={about.portrait.width}
-                height={about.portrait.height}
-                sizes="(min-width: 1024px) 24rem, 100vw"
-                // Served exactly as supplied: no re-encode, no quality loss.
-                unoptimized
-                className="w-full object-cover"
-              />
-            </div>
-          ) : null}
-
+        <Reveal delay={0.1}>
           <div className="flex flex-col gap-4">
             <h3
               id={DOMAINS_HEADING_ID}
